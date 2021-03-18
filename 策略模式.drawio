@@ -1,1 +1,55 @@
-<mxfile host="app.diagrams.net" modified="2021-03-18T15:01:08.176Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" version="14.4.9" etag="eBM7olqAr8_KQTUVfNNw" type="github"><diagram id="IcVGSsz_HchSi2ZRTLyT">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2021-03-18T15:27:49.410Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36" etag="dzUsRvLlSZno5qTmeFhM" version="14.4.9" type="github">
+  <diagram id="IcVGSsz_HchSi2ZRTLyT" name="第 1 页">
+    <mxGraphModel dx="2029" dy="774" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-12" value="" style="html=1;shadow=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.62;dx=40.55;direction=south;notch=0;strokeWidth=1;flipH=0;labelBackgroundColor=none;labelBorderColor=none;sketch=0;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="180" y="300" width="30" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-1" value="策略模式" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeWidth=15;" vertex="1" parent="1">
+          <mxGeometry x="25" y="260" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-2" value="=" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="260" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-4" value="接口" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="254" width="110" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-5" value="+" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="260" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-8" value="实现类" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="254" width="110" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-9" value="+" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="260" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-10" value="逻辑分派" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="254" width="110" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-14" value="Fruit接口" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="150" y="430" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-17" value="多种Fruit接口的实现类" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="270" y="430" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-19" value="通过某种条件找到&lt;br&gt;对应的实现类" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="480" y="420" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-22" value="无论是switch还是if else还是遍历还是反射&lt;br&gt;本质都是逻辑分派" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="130" y="535" width="370" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-26" value="" style="html=1;shadow=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.62;dx=40.55;direction=south;notch=0;strokeWidth=1;flipH=0;labelBackgroundColor=none;labelBorderColor=none;sketch=0;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="350" y="300" width="30" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-27" value="" style="html=1;shadow=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.62;dx=40.55;direction=south;notch=0;strokeWidth=1;flipH=0;labelBackgroundColor=none;labelBorderColor=none;sketch=0;fillColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="510" y="300" width="30" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="9-vye47IXmZ6TZmiBFfD-28" value="Apple&amp;nbsp;&lt;span style=&quot;color: rgb(204 , 153 , 205) ; background-color: transparent ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;monaco&amp;#34; , &amp;#34;andale mono&amp;#34; , &amp;#34;ubuntu mono&amp;#34; , monospace ; font-size: 1em ; word-spacing: normal ; text-align: left&quot;&gt;extends&lt;/span&gt;&lt;span&gt;&amp;nbsp;Fruit&lt;/span&gt;&lt;br&gt;Orange&amp;nbsp;&lt;span style=&quot;color: rgb(204 , 153 , 205) ; background-color: transparent ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;monaco&amp;#34; , &amp;#34;andale mono&amp;#34; , &amp;#34;ubuntu mono&amp;#34; , monospace ; font-size: 1em ; word-spacing: normal ; text-align: left&quot;&gt;extends&lt;/span&gt;&lt;span&gt;&amp;nbsp;Fruit&lt;/span&gt;&lt;br&gt;Banana&amp;nbsp;&lt;span style=&quot;color: rgb(204 , 153 , 205) ; background-color: transparent ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;monaco&amp;#34; , &amp;#34;andale mono&amp;#34; , &amp;#34;ubuntu mono&amp;#34; , monospace ; font-size: 1em ; word-spacing: normal ; text-align: left&quot;&gt;extends&lt;/span&gt;&lt;span&gt;&amp;nbsp;Fruit&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="275" y="460" width="160" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
