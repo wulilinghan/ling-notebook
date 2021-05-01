@@ -1,1 +1,79 @@
-<mxfile host="app.diagrams.net" modified="2021-05-01T10:07:29.038Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36" version="14.6.9" etag="fQgXctaKL4EbAEvFDdja" type="github"><diagram id="dPScNW-UIiB4ZUtxpsmn">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2021-05-01T10:24:30.771Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36" etag="RHCWKFsZg_-gm2tpM4iQ" version="14.6.9" type="github">
+  <diagram id="dPScNW-UIiB4ZUtxpsmn" name="第 1 页">
+    <mxGraphModel dx="1703" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-1" value="登录" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-3" target="dpWHIGdJJ9qzUJyivSo7-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-3" value="交互式、非登录shell" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-5" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="290" y="130" as="sourcePoint" />
+            <mxPoint x="480" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="480" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-6" target="dpWHIGdJJ9qzUJyivSo7-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-6" value="交互式、登录shell" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="200" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-7" value="" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="470" as="sourcePoint" />
+            <mxPoint x="157" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="157" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-8" target="dpWHIGdJJ9qzUJyivSo7-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-8" value="/etc/profile" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-10" target="dpWHIGdJJ9qzUJyivSo7-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-10" value="/etc/profile.d" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="360" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-12" target="dpWHIGdJJ9qzUJyivSo7-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-12" value="~/.bash_profile" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="440" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-14" target="dpWHIGdJJ9qzUJyivSo7-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-14" value="~/.bash_login" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="520" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dpWHIGdJJ9qzUJyivSo7-16" target="dpWHIGdJJ9qzUJyivSo7-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-16" value="~/.profile" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="600" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-18" value="~/.bashrc" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="600" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dpWHIGdJJ9qzUJyivSo7-21" value="&lt;font style=&quot;font-size: 19px&quot;&gt;Linux 环境变量的加载顺序&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="20" width="240" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
