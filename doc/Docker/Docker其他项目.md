@@ -202,3 +202,67 @@ https://192.168.3.4/
 
 在完成上述配置后，就可以将你的客户端网关指向新搭建的openwrt了。此时，应该可以正常访问外部网站，也能访问内网任意地址。
 
+# Frp
+
+> 内网穿透
+
+## 1.  服务端( snowdreamtech/frps)
+
+```markdown
+# 首先在Docker目录下创建fpr客户端的映射目录
+mkdir -p /opt/docker/frp
+
+# 在映射目录下面创建映射文件frpc.ini
+进入映射目录
+cd /opt/docker/frp
+编辑映射文件
+vi frps.ini
+
+# 填入如下内容
+[common]
+bind_addr=0.0.0.0
+bind_port=7000
+token=xxxxxx		# 客户端和服务端都要配而且要一样
+
+dashboard_port=7500 		#控制台登录端口，自定义
+dashboard_user=admin		#控制台登录名
+dashboard_pwd=xxxx		#控制台登录密码
+
+# 运行命令
+docker run  --network host -d --restart=always -v /opt/docker/frp/frps.ini:/etc/frp/frps.ini --name frps snowdreamtech/frps
+```
+
+
+## 2. 客户端(snowdreamtech/frpc)
+```markdown
+# 首先在Docker目录下创建fpr客户端的映射目录
+mkdir -p /opt/docker/frp
+
+# 在映射目录下面创建映射文件frpc.ini
+进入映射目录
+cd /opt/docker/frp
+编辑映射文件
+vi frpc.ini
+
+# 填入如下内容
+[common]
+server_addr=xxx.xx.x.xx 	 	   #你的frps服务端的地址(公网IP或者域名)
+server_port=7000	   				#你的frps服务端端口号(可以自己单独指定)
+token=xxxxxxxxxx    		       #frps服务端token认证 (这个可以加也可以不加，需要根据服务端配置文件来对应)
+
+[blog]
+type=tcp
+local_ip=127.0.0.1 	#本地需要映射可以通过外网访问的应用IP
+local_port=8081  		#本地应用端口
+remote_port=6001 		#映射公网服务器端口
+
+[kibana]
+type=tcp
+local_ip=127.0.0.1	#本地需要映射可以通过外网访问的应用IP
+local_port=5601  		#本地应用端口
+remote_port=5601 		#映射公网服务器端口
+
+# 启动命令
+docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc/frp/frpc.ini --name=frpc snowdreamtech/frpc
+```
+
