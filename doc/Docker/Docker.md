@@ -359,7 +359,35 @@ docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/r
 # 3.访问地址
 http://192.168.3.50:9000/
 ```
+#### 8.1.1 docker开启远程连接（通过本地Portainer连接远程服务器docker）
+```markdown
+# 1. 编辑docker.service
+vim /usr/lib/systemd/system/docker.service
 
+#找到 ExecStart 属性
+[Service]
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+#新增 -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+# 建议换2375端口，提示安全性
+[Service]
+ExecStart=/usr/bin/dockerd -H  fd:// --containerd=/run/containerd/containerd.sock -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+
+# 2. 重启docker重新读取配置文件，重新启动docker服务
+systemctl daemon-reload
+systemctl restart docker
+
+# 3. 开放防火墙端口
+firewall-cmd --zone=public --add-port=2375/tcp --permanent
+
+#4.刷新防火墙
+firewall-cmd --reload
+
+# 这个内容有待验证
+6.如果重启不起来 估计是这个 unix://var/run/docker.sock 文件位置不对 
+find / -name docker.sock 查找一下正确位置就好了
+
+```
 
 
 ### 8.1 安装MySQL
@@ -463,20 +491,23 @@ http://192.168.3.50:9000/
 	docker pull nginx
 
 # 3.临时启动nginx容器
-		docker run -p 80:80 --name nginx -d nginx
+	docker run -p 80:80 --name nginx -d nginx
 
 # 3.1.进入容器
-		docker exec -it nginx /bin/bash
-		查找目录:  whereis nginx
-		配置文件:  /etc/nginx/nginx.conf
-
+    进入容器：docker exec -it nginx /bin/bash
+    查找目录：whereis nginx
+    配置文件路径：/etc/nginx/nginx.conf
 # 3.2.复制配置文件到宿主机
-		docker cp nginx: /etc/nginx/nginx.conf /home/nginx
+    mkdir -p /opt/docker/nginx/html
+    docker cp nginx:/etc/nginx/nginx.conf /opt/docker/nginx
+	docker cp nginx:/usr/share/nginx/html /opt/docker/nginx
 # 3.3.删除临时容器
-		docker stop nginx
-		docker rm nginx
+    docker stop nginx
+    docker rm nginx
 # 4.挂在nginx配置以及html到宿主机外部
-		docker run --name nginx -v /home/nginx/nginx.conf:/etc/nginx/nginx.conf -v /home/nginx/html:/usr/share/nginx/html -p 80:80 -d nginx		
+	docker run --name nginx -v /opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/docker/nginx/html:/usr/share/nginx/html -p 80:80 -d nginx		
+	
+	docker安装nginx 使用起来有点麻烦 许多路径需要映射
 ```
 
 ----
@@ -536,25 +567,31 @@ http://192.168.3.50:9000/
 ```markdown
 # 1.dockerhub 拉取镜像
 	docker pull elasticsearch:7.6.2
-# 2.先启动一次生成默认配置文件
-	1. docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e  "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms256m -Xmx256m" elasticsearch:7.6.2
-	2.设置外部数据卷
+# 2.配置文件
+#2.1. 先启动一次生成默认配置文件
+docker run -d --name elasticsearch  -p 9200:9200 -p 9300:9300 -e  "discovery.type=single-node" -e ES_JAVA_OPTS="-Xms256m -Xmx256m" elasticsearch:7.6.2
+#2.2.设置外部数据卷
 	mkdir -p /home/elasticsearch/{config,data,logs,plugins}
-	3.将容器内文件拷贝出来
+#2.3.将容器内文件拷贝出来
 	docker cp elasticsearch:/usr/share/elasticsearch/config /home/elasticsearch
     docker cp elasticsearch:/usr/share/elasticsearch/logs /home/elasticsearch
     docker cp elasticsearch:/usr/share/elasticsearch/data /home/elasticsearch
     docker cp elasticsearch:/usr/share/elasticsearch/plugins /home/elasticsearch
-	4.设置elasticsearch.yml的内容
-	vi /home/elasticsearch/config/elasticsearch.yml
-	修改以下几个配置，没有就新增
-        cluster.name: "docker-cluster"
-        network.hosts:0.0.0.0
-        # 跨域
-        http.cors.allow-origin: "*"
-        http.cors.enabled: true
-        http.cors.allow-headers: Authorization,X-Requested-With,Content-Length,Content-Type
-    5.停止并删除临时容器
+#2.4.设置elasticsearch.yml的内容
+vi /home/elasticsearch/config/elasticsearch.yml
+    修改以下几个配置，没有就新增：
+    cluster.name: "docker-cluster"
+    network.hosts:0.0.0.0
+    # 跨域
+    http.cors.allow-origin: "*"
+    http.cors.enabled: true
+    http.cors.allow-headers: Authorization,X-Requested-With,Content-Length,Content-Type
+    # 密码相关配置
+    xpack.security.enabled: true
+    xpack.license.self_generated.type: basic
+    xpack.security.transport.ssl.enabled: true
+
+#2.5.停止并删除临时容器
       docker stop elasticsearch
       docker rm elasticsearch
 # 3.运行docker镜像
@@ -569,9 +606,32 @@ docker run --name elasticsearch \
 -v /home/elasticsearch/data:/usr/share/elasticsearch/data \
 -v /home/elasticsearch/logs:/usr/share/elasticsearch/logs \
 -d elasticsearch:7.6.2
+# 4.设置密码
+    docker exec -it elasticsearch /bin/bash
+    #进入es 名录目录 
+    cd /bin
+    #执行命令，交互式设置密码（注意保存好全部密码）
+    ./elasticsearch-setup-passwords interactive
+    
+    # 执行此命令会创建这些账号，我这里设置的都是同一个密码elastic@123
+Changed password for user [apm_system]
+Changed password for user [kibana]
+Changed password for user [logstash_system]
+Changed password for user [beats_system]
+Changed password for user [remote_monitoring_user]
+Changed password for user [elastic]
+
+Elastic内置用户
+elastic：内置超级用户
+kibana：仅可用于kibana用来连接elasticsearch并与之通信, 不能用于kibana登录
+logstash_system：用于Logstash在Elasticsearch中存储监控信息时使用
+
 # 4.访问
 	http://192.168.3.50:9200/
+	
 ```
+执行创建密码命令截图
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212122114744.png)
 
 - 如果启动出现如下错误
 - ![image-20200602184321790](assets/image-20200602184321790.png)

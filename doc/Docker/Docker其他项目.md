@@ -205,6 +205,7 @@ https://192.168.3.4/
 # Frp
 
 > 内网穿透
+> 官方配置文档：https://gofrp.org/docs/reference/server-configures/
 
 ## 1.  服务端( snowdreamtech/frps)
 
@@ -222,7 +223,7 @@ vi frps.ini
 [common]
 bind_addr=0.0.0.0
 bind_port=7000
-token=xxxxxx		# 客户端和服务端都要配而且要一样
+token=your_frps_password		# 客户端和服务端都要配而且要一样
 
 dashboard_port=7500 		#控制台登录端口，自定义
 dashboard_user=admin		#控制台登录名
@@ -246,9 +247,15 @@ vi frpc.ini
 
 # 填入如下内容
 [common]
+#打开浏览器通过 http://127.0.0.1:7400 访问 Admin UI
+admin_addr = 127.0.0.1
+admin_port = 7400
+admin_user = admin
+admin_pwd = admin
+# 服务器frps信息
 server_addr=xxx.xx.x.xx 	 	   #你的frps服务端的地址(公网IP或者域名)
 server_port=7000	   				#你的frps服务端端口号(可以自己单独指定)
-token=xxxxxxxxxx    		       #frps服务端token认证 (这个可以加也可以不加，需要根据服务端配置文件来对应)
+token=your_frps_password    		       #frps服务端token认证 (这个可以加也可以不加，需要根据服务端配置文件来对应)
 
 [blog]
 type=tcp
