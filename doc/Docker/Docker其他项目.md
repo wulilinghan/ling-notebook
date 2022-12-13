@@ -273,3 +273,39 @@ remote_port=5601 		#映射公网服务器端口
 docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc/frp/frpc.ini --name=frpc snowdreamtech/frpc
 ```
 
+# Dashy
+
+> 一个开源、高度可定制、易于使用、尊重隐私的仪表板应用程序
+>
+> https://github.com/lissy93/dashy
+
+```markdown
+# 初次启动生成默认配置文件
+docker run -d -p 4000:80 --name dashy lissy93/dashy
+
+#复制配置文件
+docker cp dashy:/app/public/conf.yml /opt/docker/dashy
+
+# 删除默认容器
+docker stop dashy
+docker rm dashy
+
+# 设置访问密码，修改配置文件，新增一下内容（待验证）
+appConfig:
+  auth:
+    users:
+    - user: alicia
+      hash: 4D1E58C90B3B94BCAD9848ECCACD6D2A8C9FBC5CA913304BBA5CDEAB36FEEFA3
+      type: admin
+      
+# 重新启动
+docker run -d \
+  -p 4000:80 \
+  -v /opt/docker/dashy/conf.yml:/app/public/conf.yml \
+  --name dashy \
+  --restart=always \
+  lissy93/dashy
+```
+
+
+
