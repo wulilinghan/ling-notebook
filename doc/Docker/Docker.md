@@ -509,8 +509,17 @@ find / -name docker.sock 查找一下正确位置就好了
 	
 	docker安装nginx 使用起来有点麻烦 许多路径需要映射
 ```
+### 8.3.1安装nginxWebUI
 
-----
+> nginx图形化配置管理工具，使用网页来快速配置与管理nginx与nginx集群
+>
+> https://www.nginxwebui.cn/
+
+```
+docker run -itd -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8081" --net=host --privileged=true  --name nginxWebUI cym1102/nginxwebui
+```
+
+
 
 ### 8.4 安装Tomcat
 

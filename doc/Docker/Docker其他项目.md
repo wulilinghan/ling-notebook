@@ -307,5 +307,29 @@ appConfig:
       type: admin
 ```
 
+# File Browser
 
+> filebrowser 是一个使用go语言编写的软件，功能是可以通过浏览器对服务器上的文件进行管理。可以是修改文件，或者是添加删除文件，甚至可以分享文件，是一个很棒的文件管理器，你甚至可以当成一个网盘来使用。总之使用非常简单方便，功能很强大。
+>
+> https://github.com/filebrowser/filebrowser
 
+```markdown
+
+# 运行命令
+docker run -d  \
+-p 8002:80 \
+-v /opt:/srv \
+-v /opt/docker/filebrowser/filebrowserconfig.json:/etc/config.json \
+-v /opt/docker/filebrowser/database.db:/etc/database.db \
+--name filebrowser  \
+--restart=always  \
+filebrowser/filebrowser
+
+# 相关说明
+-v /opt:/srv：这行命令意思是filebrowser将以这个 /opt 目录作为根目录，是挂载的宿主机目录
+默认账号密码 admin/admin
+```
+
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212142018068.png)
+
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212142017568.png)
