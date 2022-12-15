@@ -64,13 +64,13 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 - `dockerFile:`docker生成镜像配置文件,用来书写自定义镜像的一些配置
 - `tar:`一个对镜像打包的文件,日后可以还原成镜像
 
-## 4.docker的镜像原理
+## 5.Docker的镜像原理
 
-### 4.1 镜像是什么？
+### 5.1 镜像是什么？
 
 > 镜像是一种轻量级的，可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件，它包含运行某个软件所需的所有内容，包括代码、运行时所需的库、环境变量和配置文件。
 
-### 4.2 为什么一个镜像会那么大？
+### 5.2 镜像 结构
 
 ![image-20200404142950068](assets/image-20200404142950068.png)
 
@@ -79,7 +79,7 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 -  UnionFS（联合文件系统）:
   - Union文件系统是一种分层，轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下。Union文件系统是Docker镜像的基础。这种文件系统特性:就是一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录 。	
 
-### 4.3 Docker镜像原理
+### 5.3 Docker镜像原理
 
 > `docker的镜像实际是由一层一层的文件系统组成。`
 
@@ -94,16 +94,16 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 
 ![](assets/1567585172(1).jpg)
 
-### 4.4 为什么docker镜像要采用这种分层结构呢?
+### 5.4 为什么docker镜像要采用这种分层结构呢?
 
 > `最大的一个好处就是资源共享`
 
 - 比如：有多个镜像都是从相同的base镜像构建而来的，那么宿主机只需在磁盘中保存一份base镜像。同时内存中也只需要加载一份base镜像，就可以为所有容器服务了。而且镜像的每一层都可以被共享。Docker镜像都是只读的。当容器启动时，一个新的可写层被加载到镜像的顶部。这一层通常被称为容器层，容器层之下都叫镜像层。
 
 ---
-## 4.Docker的安装(centos7.x)
+## 6.Docker的安装(centos7.x)
 
-### 4.1 卸载原有 docker
+### 6.1 卸载原有 docker
 
 ```shell
 $ sudo yum remove docker \
@@ -116,25 +116,20 @@ $ sudo yum remove docker \
                   docker-engine
 ```
 
-### 4.2 安装docker
-
-> 安装docker依赖
+### 6.2 安装docker
 
 ```shell
+# 安装docker依赖
 $ sudo yum install -y yum-utils \
   device-mapper-persistent-data \
   lvm2
-```
 
-> 设置docker的yum源（比较慢）
-
-```shell
+# 设置docker的yum源
 $ sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
-```
-> 可以选择国内的一些源地址：
-```shell
+
+# 可以选择国内的一些源地址
 # 阿里云
 $ sudo yum-config-manager \
     --add-repo \
@@ -146,17 +141,16 @@ $ sudo yum-config-manager \
     https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo
 ```
 
-> 安装最新版的docker
 
 ```shell
+# 安装最新版的docker
 $ sudo yum install docker-ce docker-ce-cli containerd.io
-```
 
-> 指定版本安装docker
-
-```shell
+# 或指定版本安装docker
 $ yum list docker-ce --showduplicates | sort -r
+# 安装指定版本docker命令格式
 $ sudo yum install docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
+# 安装指定版本docker
 $ sudo yum install docker-ce-18.09.5-3.el7 docker-ce-cli-18.09.5-3.el7 containerd.io
 ```
 
@@ -178,13 +172,13 @@ $ sudo systemctl stop docker
 
 ------
 
-## 6. Docker 配置阿里镜像加速服务
+### 6.3 配置阿里镜像加速服务
 
-### 6.1 docker 运行流程
+#### 6.3.1 docker 运行流程
 
 ![image-20200404120356784](assets/image-20200404120356784.png)
 
-### 6.2 docker配置阿里云镜像加速
+#### 6.3.2 docker配置阿里云镜像加速
 
 - 访问[阿里云登录](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)自己账号查看docker镜像加速服务
 
@@ -214,30 +208,29 @@ sudo systemctl restart docker
 -----
 
 
-## 8.常用命令
+## 7. Docker常用命令
 
-### 6.1 辅助命令
+### 7.1 辅助命令
 
 ~~~markdown
 # 1.安装完成辅助命令
-
-		docker version	--------------------------	查看docker的信息
-		docker info		--------------------------	查看更详细的信息
-		docker --help	--------------------------	帮助命令
+    docker version	--------------------------	查看docker的信息
+    docker info		--------------------------	查看更详细的信息
+    docker --help	--------------------------	帮助命令
 ~~~
 
-### 6.2 Images 镜像命令
+### 7.2 Images 镜像命令
 
 ~~~markdown
 # 1.查看本机中所有镜像
 	docker images	--------------------------	列出本地所有镜像
 		-a			列出所有镜像（包含中间映像层）
-  	-q			只显示镜像id
+  		-q			只显示镜像id
 
 # 2.搜索镜像
 	docker search [options] 镜像名	-------------------	去dockerhub上查询当前镜像
 		-s 指定值		列出收藏数不少于指定值的镜像
-  	--no-trunc	  显示完整的镜像信息
+  		--no-trunc	  显示完整的镜像信息
 
 # 3.从仓库下载镜像
 	docker pull 镜像名[:TAG|@DIGEST]	----------------- 下载镜像
@@ -247,9 +240,9 @@ sudo systemctl restart docker
 		-f		强制删除
 ~~~
 
-### 6.3 Contrainer 容器命令
+### 7.3 Contrainer 容器命令
 
-#### 6.3.1 基本命令(容器外操作)
+#### 7.3.1 基本命令(容器外操作)
 
 ~~~markdown
 # 1.运行容器
@@ -291,7 +284,7 @@ sudo systemctl restart docker
     docker logs -t -f <容器id|容器名称>
 ~~~
 
-#### 6.3.2 进阶命令(容器内数据交互)
+#### 7.3.2 进阶命令(容器内数据交互)
 
 centos ----> docker(引擎) ---->  mynginx(容器) 
 
@@ -347,6 +340,29 @@ centos ----> docker(引擎) ---->  mynginx(容器)
 
 ## 8.Docker安装常用服务
 
+### 8.0 Docker中出现如下错误解决方案
+
+```powershell
+[root@localhost ~]# docker search mysql 或者 docker pull 这些命令无法使用
+Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: x509: certificate has expired or is not yet valid
+```
+
+![image-20200602183429286](assets/image-20200602183429286.png)
+
+- 注意:**这个错误的原因在于是系统的时间和docker hub时间不一致,需要做系统时间与网络时间同步**
+
+```markdown
+# 1.安装时间同步
+	sudo yum -y install ntp ntpdate
+# 2.同步时间
+	sudo ntpdate cn.pool.ntp.org
+# 3.查看本机时间
+	date
+# 4.从新测试
+```
+
+![image-20200602183718623](assets/image-20200602183718623.png)
+
 ### 8.1 安装Portainer
 
 ```markdown
@@ -359,7 +375,11 @@ docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/r
 # 3.访问地址
 http://192.168.3.50:9000/
 ```
-#### 8.1.1 docker开启远程连接（通过本地Portainer连接远程服务器docker）
+#### 8.1.1 docker开启远程连接
+
+> 通过本地Portainer连接远程服务器docker
+
+
 ```markdown
 # 1. 编辑docker.service
 vim /usr/lib/systemd/system/docker.service
@@ -444,8 +464,15 @@ find / -name docker.sock 查找一下正确位置就好了
 # 8.执行sql文件到mysql中
 	docker exec -i mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < /root/xxx.sql
 ```
+### 8.2 安装Oracle11g
+```markdown
+docker run -d -it -p 1521:1521 --name oracle11g --restart=always --mount source=oracle_vol,target=/home/oracle/app/oracle/oradata registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
 
-### 8.2 安装Redis
+–mount表示要将Host上的路径挂载到容器中。
+source=oracle_vol为Host的持久化卷，若未提前创建会自动创建，可通过 docker volume instpect 【容器名】 查看volume的具体位置，target为容器中的路径
+```
+
+### 8.3 安装Redis
 
 ```markdown
 # 1.在docker hub搜索redis镜像
@@ -481,7 +508,7 @@ find / -name docker.sock 查找一下正确位置就好了
 	docker run --name redis --restart=always -v /home/redis/data:/data -v /home/redis/redis.conf:/usr/local/etc/redis/redis.conf -p 6379:6379 -d redis redis-server 					/usr/local/etc/redis/redis.conf  
 ```
 
-### 8.3 安装Nginx
+### 8.4 安装Nginx
 
 ```markdown
 # 1.在docker hub搜索nginx
@@ -509,7 +536,7 @@ find / -name docker.sock 查找一下正确位置就好了
 	
 	docker安装nginx 使用起来有点麻烦 许多路径需要映射
 ```
-### 8.3.1安装nginxWebUI
+#### 8.4.1安装nginxWebUI
 
 > nginx图形化配置管理工具，使用网页来快速配置与管理nginx与nginx集群
 >
@@ -521,7 +548,7 @@ docker run -itd -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--se
 
 
 
-### 8.4 安装Tomcat
+### 8.5 安装Tomcat
 
 ```markdown
 # 1.在docker hub搜索tomcat
@@ -543,7 +570,7 @@ docker run -itd -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--se
 
 -----
 
-### 8.5 安装MongoDB
+### 8.6 安装MongoDB
 
 ```markdown
 # 1.运行mongDB
@@ -567,11 +594,11 @@ docker run -itd -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--se
 	docker run -d -p 27017:27017 -v /root/mongo/data:/data/db --name mymongo mongo 
 ```
 
-### 8.6 安装ElasticSearch
+### 8.7 安装ElasticSearch
 
 - `注意:`**调高JVM线程数限制数量**
 
-#### 8.6.1.拉取镜像运行elasticsearch
+#### 8.7.1 安装elasticsearch
 
 ```markdown
 # 1.dockerhub 拉取镜像
@@ -659,7 +686,7 @@ logstash_system：用于Logstash在Elasticsearch中存储监控信息时使用
 
 ```
 
-#### 8.6.2.安装IK分词器
+#### 8.7.2 安装IK分词器
 
 ```markdown
 # 1.下载对应版本的IK分词器
@@ -691,7 +718,7 @@ logstash_system：用于Logstash在Elasticsearch中存储监控信息时使用
 	docker commit -a="xiaochen" -m="es with IKAnalyzer" 容器id xiaochen/elasticsearch:7.6.2
 ```
 
-#### 8.6.3. 安装Kibana
+#### 8.7.3 安装Kibana
 
 ```markdown
 # 1.下载kibana镜像到本地
@@ -719,7 +746,7 @@ logstash_system：用于Logstash在Elasticsearch中存储监控信息时使用
 	http://192.168.3.50:5601/
 ```
 
-#### 8.6.4.安装elasticsearch-head
+#### 8.7.4 安装elasticsearch-head
 
 ```Markdown
 # 1.下载 mobz/elasticsearch-head 最新镜像
@@ -743,29 +770,6 @@ chmod 776 /root/elasticsearch/config/elasticsearch.yml
 ```
 
 ----
-
-### 8.1.Docker中出现如下错误解决方案
-
-```powershell
-[root@localhost ~]# docker search mysql 或者 docker pull 这些命令无法使用
-Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: x509: certificate has expired or is not yet valid
-```
-
-![image-20200602183429286](assets/image-20200602183429286.png)
-
-- 注意:**这个错误的原因在于是系统的时间和docker hub时间不一致,需要做系统时间与网络时间同步**
-
-```markdown
-# 1.安装时间同步
-	sudo yum -y install ntp ntpdate
-# 2.同步时间
-	sudo ntpdate cn.pool.ntp.org
-# 3.查看本机时间
-	date
-# 4.从新测试
-```
-
-![image-20200602183718623](assets/image-20200602183718623.png)
 
 ## 9.Dockerfile
 
@@ -979,4 +983,35 @@ http://10.15.0.8:8989/ems/login.html
 ![image-20200605173141636](assets/image-20200605173141636.png)
 
 ##### 7.接口docker容器之间网络互通问题
+
+# Docker Compose
+
+Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。
+
+Compose 使用的三个步骤：
+
+- 使用 Dockerfile 定义应用程序的环境。
+- 使用 docker-compose.yml 定义构成应用程序的服务，这样它们可以在隔离环境中一起运行。
+- 最后，执行 docker-compose up 命令来启动并运行整个应用程序。
+
+docker-compose.yml 的配置案例如下（配置参数参考下文）：
+
+```yaml
+# yaml 配置实例
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+   - "5000:5000"
+    volumes:
+   - .:/code
+    - logvolume01:/var/log
+    links:
+   - redis
+  redis:
+    image: redis
+volumes:
+  logvolume01: {}
+```
 

@@ -298,13 +298,6 @@ docker run -d \
   --restart=always \
   lissy93/dashy
   
-# 设置访问密码，修改配置文件，新增一下内容（待验证）
-appConfig:
-  auth:
-    users:
-    - user: alicia
-      hash: 4D1E58C90B3B94BCAD9848ECCACD6D2A8C9FBC5CA913304BBA5CDEAB36FEEFA3
-      type: admin
 ```
 
 # File Browser
