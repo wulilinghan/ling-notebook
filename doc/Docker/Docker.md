@@ -466,12 +466,73 @@ find / -name docker.sock 查找一下正确位置就好了
 ```
 ### 8.2 安装Oracle11g
 ```markdown
+# 运行
+docker run -d -p 1521:1521 --name oracle11g registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
+
+# 进入oracle11g容器
+docker exec -it oracle11g bash
+
+# 切换到root用户下进行配置 密码：helowin
+su root  
+# 编辑profile文件配置ORACLE环境变量
+vi /etc/profile
+# 添加以下内容
+export ORACLE_HOME=/home/oracle/app/oracle/product/11.2.0/dbhome_2
+export ORACLE_SID=helowin
+export PATH=$ORACLE_HOME/bin:$PATH
+# 生效配置
+source /etc/profile
+
+# 创建软连接
+ln -s $ORACLE_HOME/bin/sqlplus /usr/bin
+
+# 切换到oracle 用户，登录sqlplus并修改sys、system用户密码
+su - oracle
+sqlplus /nolog
+conn /as sysdba
+```
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212162246541.png)
+
+```markdown
+# 修改sys、system用户密码并刷新权限，密码是oracle123
+alter user sys identified by oracle123;
+alter user system identified by oracle123;
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+
+# 创建一个具有dba权限的用户，用户名为root，密码为root123
+create user root identified by root123;
+grant connect,resource,dba to root;
+
+# 创建账号并刷新权限
+create user 新账号 identified by 新密码;
+-- 创建命名空间，注意这里的数据存储文件的位置是在容器的位置，与挂载的数据卷的位置无关
+create tablespace <tablespacename> datafile '/u01/app/oracle/oradata/XE/xxx.dbf' size 1000M;
+-- 给用户权限
+-- 将最高权限授权给用户
+grant create session,create table,create view,create sequence,unlimited tablespace to <username>;
+grant dba to <username>;
+grant sysdba to <username>;
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+
+# 连接Oracle 
+账号：root
+密码：root123
+服务名：helowin
+```
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212162250411.png)
+
+```markdown
+# 在容器中执行命令，查看Oracle状态
+lsnrctl status
+```
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212162253254.png)
+
+```
 docker run -d -it -p 1521:1521 --name oracle11g --restart=always --mount source=oracle_vol,target=/home/oracle/app/oracle/oradata registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
 
 –mount表示要将Host上的路径挂载到容器中。
 source=oracle_vol为Host的持久化卷，若未提前创建会自动创建，可通过 docker volume instpect 【容器名】 查看volume的具体位置，target为容器中的路径
 ```
-
 ### 8.3 安装Redis
 
 ```markdown
