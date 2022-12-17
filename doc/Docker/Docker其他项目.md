@@ -1,5 +1,9 @@
 # qinglong
 
+> https://github.com/whyour/qinglong
+>
+> 支持python3、javaScript、shell、typescript 的定时任务管理面板
+
 ```Markdown
 # 1.拉取镜像
 	docker pull whyour/qinglong:latest
@@ -272,6 +276,11 @@ remote_port=5601 		#映射公网服务器端口
 # 启动命令
 docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc/frp/frpc.ini --name=frpc snowdreamtech/frpc
 ```
+# cockpit(TODO)
+
+> https://github.com/cockpit-project/cockpit
+>
+> Cockpit is a web-based graphical interface for servers.
 
 # Dashy
 
@@ -326,3 +335,131 @@ filebrowser/filebrowser
 ![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212142018068.png)
 
 ![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212142017568.png)
+
+
+# prometheus
+> https://github.com/prometheus/prometheus
+> 用于事件监视和警报的免费软件应用程序。它将实时指标记录在使用HTTP拉模型构建的时间序列数据库中，具有灵活的查询和实时警报
+
+![img](https://cdn.rawgit.com/prometheus/prometheus/e761f0d/documentation/images/architecture.svg)
+
+```markdown
+#初始化配置文件
+docker run --name prometheus -d -p 9090:9090 prom/prometheus
+# 从容器中复制默认配置文件出来
+mkdir -p /opt/docker/prometheus
+docker cp prometheus:/etc/prometheus/prometheus.yml /opt/docker/prometheus/prometheus.yml
+# 删除
+docker stop prometheus
+docker rm prometheus
+
+# 重新运行
+docker run -d -p 9090:9090 -v /opt/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml --name prometheus prom/prometheus
+
+# 访问地址
+http://192.168.3.50:9090
+```
+
+## 1. node-exporter
+```markdown
+# 安装 node-exporter 监控服务器
+docker run -d -p 9080:9100 \
+  -v /proc:/host/proc:ro \
+  -v /sys:/host/sys:ro \
+  -v /:/rootfs:ro \
+  --name node-exporter prom/node-exporter
+  
+# 访问
+http://192.168.3.50:9080/metrics
+  
+# 修改prometheus.yml，新增job ,ip及地址对应 node-exporter
+  - job_name: "linux"
+    static_configs:
+      - targets: ['192.168.3.50:9080']
+```
+
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172115235.png)
+```markdown
+# 重启  prometheus
+docker restart prometheus
+
+# 访问
+http://192.168.3.50:9090/targets
+```
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172125122.png)
+
+
+
+## 2. grafana
+
+```markdown
+# 创建数据目录
+mkdir -p /opt/docker/grafana
+# 修改目录权限，不然可能服务起不来
+chmod 777 -R /opt/docker/grafana
+
+# 运行
+docker run -d \
+  -p 3000:3000 \
+  -v /opt/docker/grafana:/var/lib/grafana \
+  --name=grafana \
+  grafana/grafana
+  
+# 访问 默认账号密码都是 admin,登录后强制更改密码 我这里改为 admin@123
+http://192.168.3.50:3000/
+
+# 点击中间 data sources ，我这用的最新版本
+```
+
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172136008.png)
+
+```markdown
+# 选择 prometheus，在url处 填写 prometheus IP地址，点击下面的保存，绿色提示说明正常
+```
+
+![image-20221217213746542](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172137605.png)
+
+![image-20221217214217881](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172142921.png)
+
+![image-20221217214243465](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172142493.png)
+
+```markdown
+#点击左侧添加 Dashboard ，点击 Add a new panel
+```
+
+![image-20221217214419056](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172144107.png)
+
+```markdown
+# 在这里输入条件 查询想要监控的数据 
+```
+
+![image-20221217215928810](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172159901.png)
+
+# cadvisor
+
+> https://github.com/google/cadvisor
+> 一款由 Google 开源的容器监控工具。它可以实时统计容器运行时占用的资源，包括 CPU 利用率、内存使用量、网络传输等信息。提供了 Web 可视化页面，能方便用户分析和监控容器运行状态，支持包括 Docker 在内的几乎所有类型的容器。
+
+```
+ docker run \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:ro \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --volume=/dev/disk/:/dev/disk:ro \
+  --publish=8080:8080 \
+  --detach=true \
+  --name=cadvisor \
+  --privileged \
+  --device=/dev/kmsg \
+  google/cadvisor
+```
+##1. 查看主机监控
+```
+访问 http://192.168.3.50:8080/containers/ 地址，在首页可以看到主机的资源使用情况，包含 CPU、内存、文件系统、网络等资源
+```
+##2. 查看容器监控
+```
+访问 http://192.168.3.50:8080/docker/  这个页面会列出 Docker 的基本信息和运行的容器情况
+```
+
