@@ -208,8 +208,9 @@ https://192.168.3.4/
 
 # Frp
 
-> 内网穿透
 > 官方配置文档：https://gofrp.org/docs/reference/server-configures/
+>
+> 内网穿透工具
 
 ## 1.  服务端( snowdreamtech/frps)
 
@@ -282,11 +283,15 @@ docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc
 >
 > Cockpit is a web-based graphical interface for servers.
 
+
+
 # Dashy
 
-> 一个开源、高度可定制、易于使用、尊重隐私的仪表板应用程序
->
 > https://github.com/lissy93/dashy
+>
+> 文档：https://dashy.to/docs/quick-start
+>
+> 一个开源、高度可定制、易于使用、尊重隐私的仪表板应用程序
 
 ```markdown
 # 初次启动生成默认配置文件
@@ -306,14 +311,131 @@ docker run -d \
   --name dashy \
   --restart=always \
   lissy93/dashy
-  
 ```
+# Keycloak
+
+>https://github.com/keycloak/keycloak
+>
+>Keycloak 是一个基于 Java 的开源、高性能、安全的身份验证系统，由 RedHat 提供支持。
+
+```markdown
+# 运行
+docker run -d \
+  -p 4001:8080 \
+  --name Keycloak-auth-server \
+  -e KEYCLOAK_USER=admin \
+  -e KEYCLOAK_PASSWORD=admin \
+  quay.io/keycloak/keycloak:15.0.2
+  
+# Web访问
+http://192.168.0.50:4001
+用户名/密码：admin/admin
+
+```
+
+## 1. 对接Dashy
+
+```
+登陆控制台：http://192.168.0.50:4001，用户名/密码：admin/admin
+
+Keycloak 使用领域（类似于租户）来创建隔离的用户组。必须先创建一个领域，然后才能添加第一个用户
+```
+
+![image-20221218141855647](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181419782.png)
+
+
+
+![image-20221218142351646](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181423694.png)
+
+```markdown
+我这里访问提示 HTTPS required
+
+stackoverflow地址：
+https://stackoverflow.com/questions/30622599/https-required-while-logging-in-to-keycloak-as-admin
+
+# 进入容器
+docker exec -it Keycloak-auth-server bash
+# 进入bin目录
+cd /opt/jboss/keycloak/bin
+
+# 陆续执行命令
+./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin
+输入以上命令后会提示输入密码： admin
+
+./kcadm.sh update realms/master -s sslRequired=NONE
+
+# 再次访问页面，点击 Administration Console ，进去就可以登录了 用 admin/admin 登录
+```
+
+```markdown
+1. 创建 realm ，name我这里定义为 dashy ，点击 Create
+```
+
+![image-20221218143846482](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181438515.png)
+
+![image-20221218143941650](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181439695.png)
+
+```markdown
+2. 创建后 会自动切入到 dashy 这个领域来，点击左侧下方 Users ，然后点击右上方 Add user
+```
+
+![image-20221218144337652](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181443707.png)
+
+```markdown
+3. 给账号 dashy 设置密码
+```
+
+![image-20221218144432829](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181444886.png)
+
+```markdown
+4. 创建 client ，点击左侧 Clients 标签，再点击右侧 Create
+这里我定义如下 
+Client ID：			id_dashy
+Client Protocol：	openid-connect
+Root URL : 			http://43.139.204.230:4000
+
+Root URL中的url就是我的 dashy 面板的访问地址
+
+# 保存后会跳转到我们穿法刚建的client设置页面，我们只需要关注以下两个url即可，不用改动
+
+Valid Redirect URIs 重定向url，即认证过后跳转的url
+Web Origins 跳转地址
+```
+
+![image-20221218145510401](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212181455441.png)
+
+
+
+### 1.1 在 Dashy 配置文件中启用 Kecloak
+
+```yaml
+vim /data/dashy/my-conf.yml
+
+vim /data/dashy/my-conf.yml
+appConfig:
+	...
+    auth:
+        enableKeycloak: true
+        keycloak:
+       		# keycloak 地址
+            serverUrl: 'http://192.168.0.50:4001'
+            realm: 'Dashy'
+            clientId: 'id_dashy'
+            # Keycloak V 17 或更早版本需要配置legacySupport: true
+            #legacySupport: true
+
+# 重启dashy
+docker restart dashy
+
+```
+
+
 
 # File Browser
 
-> filebrowser 是一个使用go语言编写的软件，功能是可以通过浏览器对服务器上的文件进行管理。可以是修改文件，或者是添加删除文件，甚至可以分享文件，是一个很棒的文件管理器，你甚至可以当成一个网盘来使用。总之使用非常简单方便，功能很强大。
->
 > https://github.com/filebrowser/filebrowser
+>
+> filebrowser 是一个使用go语言编写的软件，功能是可以通过浏览器对服务器上的文件进行管理。可以是修改文件，或者是添加删除文件，甚至可以分享文件，是一个很棒的文件管理器，你甚至可以当成一个网盘来使用。总之使用非常简单方便，功能很强大。
 
 ```markdown
 
@@ -461,5 +583,32 @@ http://192.168.3.50:3000/
 ##2. 查看容器监控
 ```
 访问 http://192.168.3.50:8080/docker/  这个页面会列出 Docker 的基本信息和运行的容器情况
+```
+
+# ntopng
+
+> https://github.com/ntop/ntopng
+>
+> ntopng 是一款网络流量监控工具，提供了直观的 Web 用户界面，用于浏览实时和历史网络流量信息。
+
+
+
+```markdown
+# 
+mkdir -p /opt/docker/ntopng
+chmod 777 /opt/docker/ntopng
+
+# 其中的 enp2s0 换成你的网络接口，ifconfig 或者 ip addr 查看网络接口名称
+docker run -d \
+    --restart=always \
+    -p 3000:3000 \
+    -v /opt/docker/ntopng/ntopng.license:/etc/ntopng.license:ro \
+    --net=host \
+    --name ntopng \
+    ntop/ntopng -i enp2s0
+
+# 访问
+http://192.168.3.50:3000
+
 ```
 
