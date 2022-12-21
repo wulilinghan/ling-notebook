@@ -277,12 +277,6 @@ remote_port=5601 		#映射公网服务器端口
 # 启动命令
 docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc/frp/frpc.ini --name=frpc snowdreamtech/frpc
 ```
-# cockpit(TODO)
-
-> https://github.com/cockpit-project/cockpit
->
-> Cockpit is a web-based graphical interface for servers.
-
 
 
 # Dashy

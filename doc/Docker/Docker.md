@@ -189,8 +189,12 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
   "registry-mirrors": ["https://lz2nib3q.mirror.aliyuncs.com"]
 }
 EOF
+
 sudo systemctl daemon-reload
 sudo systemctl restart docker
+
+可能会导致获取不到最新版本的镜像，例如 portainer ，我拉取最新才 1.1x.x 版本，而最新都2.xx.x版本了
+
 ```
 
 - 验证docker的镜像加速是否生效
@@ -366,11 +370,11 @@ Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: 
 ### 8.1 安装Portainer
 
 ```markdown
-# 1.安装命令
-docker pull portainer/portainer
+# 1.
+mkdir -p /opt/docker/portainer
 
-# 2.启动命令
-docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /home/portainer/data:/data -d portainer/portainer
+# 2.安装命令
+docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/docker/portainer:/data -d portainer/portainer
 
 # 3.访问地址
 http://192.168.3.50:9000/
@@ -402,6 +406,7 @@ firewall-cmd --zone=public --add-port=2375/tcp --permanent
 
 #4.刷新防火墙
 firewall-cmd --reload
+firewall-cmd --list-ports
 
 # 这个内容有待验证
 6.如果重启不起来 估计是这个 unix://var/run/docker.sock 文件位置不对 
