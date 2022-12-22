@@ -206,7 +206,7 @@ https://192.168.3.4/
 
 在完成上述配置后，就可以将你的客户端网关指向新搭建的openwrt了。此时，应该可以正常访问外部网站，也能访问内网任意地址。
 
-# Frp
+# Frp （内网穿透工具）
 
 > 官方配置文档：https://gofrp.org/docs/reference/server-configures/
 >
@@ -279,7 +279,7 @@ docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc
 ```
 
 
-# Dashy
+# Dashy （类似网址导航）
 
 > https://github.com/lissy93/dashy
 >
@@ -306,7 +306,7 @@ docker run -d \
   --restart=always \
   lissy93/dashy
 ```
-# Keycloak
+# Keycloak （开源身份验证系统）
 
 >https://github.com/keycloak/keycloak
 >
@@ -425,7 +425,7 @@ docker restart dashy
 
 
 
-# File Browser
+# File Browser （文件浏览器）
 
 > https://github.com/filebrowser/filebrowser
 >
@@ -551,7 +551,7 @@ http://192.168.3.50:3000/
 
 ![image-20221217215928810](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212172159901.png)
 
-# cadvisor
+# cadvisor （容器监控工具）
 
 > https://github.com/google/cadvisor
 > 一款由 Google 开源的容器监控工具。它可以实时统计容器运行时占用的资源，包括 CPU 利用率、内存使用量、网络传输等信息。提供了 Web 可视化页面，能方便用户分析和监控容器运行状态，支持包括 Docker 在内的几乎所有类型的容器。
@@ -579,7 +579,7 @@ http://192.168.3.50:3000/
 访问 http://192.168.3.50:8080/docker/  这个页面会列出 Docker 的基本信息和运行的容器情况
 ```
 
-# ntopng
+# ntopng (流量监控)
 
 > https://github.com/ntop/ntopng
 >
@@ -604,5 +604,100 @@ docker run -d \
 # 访问
 http://192.168.3.50:3000
 
+```
+
+# Uptime Kuma (轻量级网络监控)
+
+> [Uptime Kuma](https://uptime.kuma.pet/?utm_source=nicelinks.site) 
+> 一个开源自托管监控工具
+> 可监控 HTTP(s) / TCP / Ping / [DNS](https://www.isolves.com/e/tags/?tagname=DNS) 等网络
+> 支持 Telegram、Discord、Gotify、Slack、Pushover、电子邮件 (SMTP)多种通知方式
+
+```markdown
+# 创建数据目录
+mkdir -p /opt/docker/uptime-kuma
+
+# 安装命令
+docker run -d --restart=always -p 3001:3001 -v /opt/docker/uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma
+
+# 访问
+http://{servcer_ip}:3001 
+```
+
+# Flare (网址导航)
+
+> https://github.com/soulteary/docker-flare
+>
+> https://github.com/soulteary/docker-flare/blob/main/docs/advanced-startup.md
+>
+> https://hub.docker.com/r/soulteary/flare
+>
+> 一个简洁的网址导航
+
+```markdown
+# 创建数据目录
+mkdir -p  /opt/docker/flare
+
+# 安装命令
+docker run --rm -it --name flare -p 5005:5005 -v /opt/docker/flare:/app soulteary/flare:0.4.0
+
+# 访问
+http://{servcer_ip}:5005 
+
+# 设置用户账号,先删除旧容器
+docker rm flare
+# 启动
+docker run -d --name flare \
+-p 5005:5005 \
+-e FLARE_DISABLE_LOGIN=0 \
+-e FLARE_USER=flare \
+-e FLARE_PASS=flare123 \
+-v /opt/docker/flare:/app soulteary/flare:0.4.0
+
+
+# 更改链接的图标，图标访问此地址
+http://{servcer_ip}:5005/icons/
+
+```
+
+# Sonic (博客平台)
+
+>[Sonic](https://github.com/go-sonic/sonic/blob/master/doc/README_ZH.md)
+>[Sonic Docker Hub](https://hub.docker.com/r/gosonic/sonic)
+>一个用Golang开发的博客平台
+
+```markdown
+# 创建数据目录
+mkdir -p  /opt/docker/sonic
+
+# 安装命令
+docker run --name sonic-server -d -e LOGGING_LEVEL_APP=info -p 8080:8080 -v /opt/docker/sonic:/sonic gosonic/sonic
+
+# 使用 mysql 作为数据源
+docker run --name sonic-server \
+-e SQLITE3_ENABLE=false \
+-e LOGGING_LEVEL_APP=info  \
+-e MYSQL_HOST=172.17.0.5 \
+-e MYSQL_PORT=3306 \
+-e MYSQL_DB=sonicdb \
+-e MYSQL_USERNAME=root \
+-e MYSQL_PASSWORD=root \
+-p 8088:8080 \
+-v /opt/docker/sonic:/sonic -d gosonic/sonic
+
+```
+
+# Certs Maker (SSL 证书生成工具)
+
+> https://github.com/soulteary/certs-maker/blob/main/README_CN.md
+>
+> https://hub.docker.com/r/soulteary/certs-maker
+>
+> 一个小巧的 SSL 证书生成工具（Docker 工具镜像）。
+
+
+
+```
+docker run --rm -it -e CERT_DNS=lab.com,*.lab.com,*.data.lab.com -v /opt/docker/ssl:/ssl soulteary/certs-maker 
 ```
 
