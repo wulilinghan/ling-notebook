@@ -470,6 +470,8 @@ filebrowser/filebrowser
 
 ![img](https://cdn.rawgit.com/prometheus/prometheus/e761f0d/documentation/images/architecture.svg)
 
+## 1. prometheus（收集数据）
+
 ```markdown
 #初始化配置文件
 docker run --name prometheus -d -p 9090:9090 prom/prometheus
@@ -487,7 +489,7 @@ docker run -d -p 9090:9090 -v /opt/docker/prometheus/prometheus.yml:/etc/prometh
 http://192.168.3.50:9090
 ```
 
-## 1. node-exporter
+## 2. node-exporter（监控程序）
 ```markdown
 # 安装 node-exporter 监控服务器
 docker run -d -p 9080:9100 \
@@ -517,7 +519,7 @@ http://192.168.3.50:9090/targets
 
 
 
-## 2. grafana
+## 3. grafana（图形面板）
 
 ```markdown
 # 创建数据目录
@@ -641,7 +643,11 @@ http://{servcer_ip}:3001
 >
 > https://learn.netdata.cloud/docs/agent/packaging/docker
 >
-> Netdata是一个开源工具，旨在收集实时指标，例如CPU使用率，磁盘活动，带宽使用率，网站访问量等，然后将它们显示在实时的，易于解释的图表中。
+> 文档：https://learn.netdata.cloud/docs/
+>
+> netdata是一个用于分布式实时性能和运行状况监视的系统。 它使用现代的交互式Web仪表板实时提供无与伦比的洞察力，以实时了解其运行的系统上发生的所有事情（包括Web和数据库服务器之类的应用程序）。
+>
+> netdata快速高效，旨在永久在所有系统（物理和虚拟服务器，容器，IoT设备）上运行，而不会中断其核心功能。
 
 ```markdown
 # 暂时发现自定义目录挂在有问题，此步骤可忽略
@@ -666,8 +672,99 @@ docker run -d --name=netdata \
   netdata/netdata:stable
   
   # 访问
-  http://{server_ip}:19999
+  http://server_ip:19999
+  
+  # 查看netdata默认配置文件
+  http://server_ip:19999/netdata.conf
+  
+  # 更改配置文件,前面将挂载的配置文件宿主机目录在此
+	vi /var/lib/docker/volumes/netdataconfig/_data/netdata.conf
 ```
+
+## Netdata集群管理方案
+
+> 原文档地址：https://juejin.cn/post/6875163119836987406#heading-6
+
+上面展示的只是单一服务器的监控数据，而且netdata有一个缺点就是所有被监控的服务器都需要安装agent，所以，这里就是出现一个问题，就是如何将监控数据统一管理与展示？
+
+netdata官方并没设计主从模式，像zabbix那样，可以一台做为主服务器，其它的做为从服务器，将数据收集到主服务器统一处理与展示，但是，官方也给出了相关的解决方案。
+
+1、netdata.cloud 使用自带的 netdata.cloud，也就是每一个安装节点WEB界面右上角的signin。只要我们使用同一个账号登录netdata.cloud（需要kexue上网），之后各个节点之间就可以轻松通过一个账号控制。每个节点开启19999端口与允许管理员查看数据，然后控制中心通过前端从各节点的端口收集的数据，传给netdata.cloud记录并展示。
+
+这是一种被动的集群监控，本质上还是独立的机器，且不方便做自定义的集群dashboard。
+
+2、stream 插件 所以，为了解决上面这种方案的弊端，netdata又提供了另一种方法，将各节点的数据集中汇总到一台（主）服务器，数据处理也在这台服务器上，其它节点无需开放19999端口。 算是一种主动传输模式，把收集到的数据发送到主服务器上，这样在主服务器上可以进行自定义的dashboard开发。
+
+缺点：主服务器流量、负载都会比较大（在集群服务器数量较多的情况下），如果主服务器负载过高，我们可以通过设置节点服务器的数据收集周期（update every）来解决这个问题。
+
+## Netdata集群监控配置
+
+很多文章都只是介绍了其安装与一些界面的展示结果，并没有提供集群监控这一解决方案与其具体的配置，民工哥也是查了很多的资料，现在将其配置过程分享给大家。
+
+对于streaming的配置不熟悉的可以参考官方的文档说明：https://learn.netdata.cloud/docs/metrics-storage-management/enable-streaming
+
+1、节点服务器配置
+
+```ini
+[root@CentOS7-1 ~]# cd /etc/netdata/
+[root@CentOS7-1 netdata]# vim netdata.conf
+#修改配置如下
+[global]
+    memory mode = none
+    hostname = [建议修改成你的主机名]
+[web]
+    mode = none
+```
+
+然后，在/etc/netdata/目录下新建一个文件stream.conf，然后将其配置为如下：
+
+```ini
+[stream]
+    enabled = yes
+    destination = MASTER_SERVER_IP:PORT
+    api key = xxxx-xxxx-xxxx-xxxx-xxxx
+
+#参数说明如下
+ destination = MASTER_SERVER_IP:PORT  主服务器地址与端口
+ api key 必需为uuid的字符串，Linux系统中可以使用下面的命令自动生成。
+ [root@CentOS7-1 netdata]# uuidgen
+ 480fdc8c-d1ac-4d6f-aa26-128eba744089
+```
+
+配置完成之后，需要重启节点的netdata服务即可完成整个配置。
+
+```ini
+[root@CentOS7-1 ~]# systemctl restart netdata
+```
+
+2、主服务器配置
+
+在netdata.conf的同一目录下新建stream.conf并写入如下配置：
+
+```ini
+[API_KEY]/[480fdc8c-d1ac-4d6f-aa26-128eba744089]
+    enabled = yes
+    default history = 3600
+    default memory mode = save
+    health enabled by default = auto
+    allow from = *
+[API_KEY]
+    enabled = yes
+    default history = 3600
+    default memory mode = save
+    health enabled by default = auto
+    allow from = *
+#其中，API_KEY对应节点服务器的api key(字符串)，allow from可以设置数据流的允许来源以保证安全。
+#如果有多个节点服务器，则一起写在stream.conf里面
+```
+
+完成配置后重启netdata：
+
+```
+systemctl restart netdata
+```
+
+所有的配置完成后，就可以在主服务器的WEB界面右上角看到下拉菜单（主机名），点击即可看到相关的监控信息了。
 
 
 

@@ -639,25 +639,28 @@ docker run -itd -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--se
 ### 8.6 安装MongoDB
 
 ```markdown
-# 1.运行mongDB
-	docker run -d -p 27017:27017 --name mymongo mongo  ---无须权限
-	docker logs -f mymongo --查看mongo运行日志
+# 1.安装
+mkdir -p /opt/docker/mongo
 
-# 2.进入mongodb容器
-	docker exec -it mymongo /bin/bash
-		直接执行mongo命令进行操作
+# 不指定版本会拉取latest 版本（5.0+），然后我这里报错了
+# WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!
 
-# 3.常见具有权限的容器
-	docker run --name  mymongo  -p 27017:27017  -d mongo --auth
+# 这里我指定下版本安装
+docker run -d --name mongo -p 27017:27017 -v /opt/docker/mongo:/data/db  mongo:4.4.4 
 
-# 4.进入容器配置用户名密码
+# 查看mongo运行日志
+docker logs -f mongo 
+
+# 进入mongodb容器
+docker exec -it mongo /bin/bash
+
+# 进入容器配置用户名密码
 	mongo
 	use admin 选择admin库
 	db.createUser({user:"root",pwd:"root",roles:[{role:'root',db:'admin'}]})   //创建用户,此用户创建成功,则后续操作都需要用户认证
 	exit
 
-# 5.将mongoDB中数据目录映射到宿主机中
-	docker run -d -p 27017:27017 -v /root/mongo/data:/data/db --name mymongo mongo 
+
 ```
 
 ### 8.7 安装ElasticSearch
