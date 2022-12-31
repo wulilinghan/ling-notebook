@@ -305,6 +305,17 @@ docker run -d \
   --name dashy \
   --restart=always \
   lissy93/dashy
+
+# Icon图标文档
+https://github.com/Lissy93/dashy/blob/master/docs/icons.md#favicons
+#图标1
+https://simpleicons.org/
+使用 si 开头
+si-portainer，si-freenas，si-nextcloudsi-homeassistant...
+#图标2
+https://github.com/walkxcode/dashboard-icons/tree/main/png
+使用 hl 开头
+hl-home-assistant，hl-cockpit，hl-docker，hl-portainer....
 ```
 # Keycloak （开源身份验证系统）
 
@@ -624,6 +635,42 @@ docker run -d --restart=always -p 3001:3001 -v /opt/docker/uptime-kuma:/app/data
 http://{servcer_ip}:3001 
 ```
 
+# Netdata（服务器监控）
+
+> https://hub.docker.com/r/netdata/netdata
+>
+> https://learn.netdata.cloud/docs/agent/packaging/docker
+>
+> Netdata是一个开源工具，旨在收集实时指标，例如CPU使用率，磁盘活动，带宽使用率，网站访问量等，然后将它们显示在实时的，易于解释的图表中。
+
+```markdown
+# 暂时发现自定义目录挂在有问题，此步骤可忽略
+mkdir -p /opt/docker/netdata/{netdatalib,netdataconfig,netdatacache}
+
+# 启动
+docker run -d --name=netdata \
+  -p 19999:19999 \
+  -v netdataconfig:/etc/netdata \
+  -v netdatalib:/var/lib/netdata \
+  -v netdatacache:/var/cache/netdata \
+  -v /etc/passwd:/host/etc/passwd:ro \
+  -v /etc/group:/host/etc/group:ro \
+  -v /proc:/host/proc:ro \
+  -v /sys:/host/sys:ro \
+  -v /etc/os-release:/host/etc/os-release:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  -v /etc/localtime:/etc/localtime:ro \
+  --restart unless-stopped \
+  --cap-add SYS_PTRACE \
+  --security-opt apparmor=unconfined \
+  netdata/netdata:stable
+  
+  # 访问
+  http://{server_ip}:19999
+```
+
+
+
 # Flare (网址导航)
 
 > https://github.com/soulteary/docker-flare
@@ -699,5 +746,76 @@ docker run --name sonic-server \
 
 ```
 docker run --rm -it -e CERT_DNS=lab.com,*.lab.com,*.data.lab.com -v /opt/docker/ssl:/ssl soulteary/certs-maker 
+```
+
+# JetBrains License Server
+
+```
+mkdir -p /opt/docker/JetBrainsLicenseServer
+
+docker run -d -p 8087:8000 --name jetbrains_license_server \
+  -e TZ="Asia/Shanghai" \
+  -e JLS_VIRTUAL_HOSTS=192.168.3.50 \
+  -v /opt/docker/JetBrainsLicenseServer:/data \
+  crazymax/jetbrains-license-server
+  
+```
+
+# Ant-Media-Server（直播推流）
+
+> https://github.com/ant-media/Ant-Media-Server
+>
+> https://github.com/ant-media/Ant-Media-Server/wiki
+>
+> https://hub.docker.com/r/nibrev/ant-media-server
+>
+> 视频直播推流应用
+
+```markdown
+# 启动
+docker run -d --name ant-media-server -p 5080:5080 nibrev/ant-media-server
+
+# 访问
+http://{server_ip}:5080 
+```
+
+```markdown
+# 1. 上传文件
+```
+
+![image-20221231003036916](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212310030995.png)
+
+```markdown
+# 2. 点击New Live Stream，选择Playlist，Stream Id不用手动填，点击点击Add Playlist Item，点击一次添加一个视频地址Playlist URL，这个url在Vod标签点击视频播放按钮，然后右键视频窗口，复制视频地址获取，然后点击Create
+```
+
+![image-20221231003133767](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212310031834.png)
+
+![image-20221231003536063](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212310035147.png)
+
+```markdown
+# 3. 设置推流地址，我这里以哔哩哔哩为例，先点击Edit RTMP Endpoints填入推流地址，点击Add RTMP Endpoint添加，Close，然后点击Start Broadcast开始推流
+```
+
+![image-20221231003904970](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212310039007.png)
+
+
+
+# KPlayer
+
+> https://github.com/bytelang/kplayer-go
+>
+> KPlayer可以帮助你快速的在服务器上进行视频资源的循环直播推流，只需要简单对配置文件进行自定义即可开启直播推流
+
+# LAL 
+
+> https://github.com/q191201771/lal
+>
+> https://pengrl.com/lal/#/
+>
+> Golang 开发的流媒体（直播音视频网络传输）服务器。
+
+```
+docker run -it -p 1935:1935 -p 8080:8080 -p 4433:4433 -p 5544:5544 -p 8083:8083 -p 8084:8084 -p 30000-30100:30000-30100/udp q191201771/lal /lal/bin/lalserver -c /lal/conf/lalserver.conf.json
 ```
 
