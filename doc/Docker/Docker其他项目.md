@@ -619,6 +619,34 @@ http://192.168.3.50:3000
 
 ```
 
+# vnstat（网络流量监控）
+
+> vnstat：https://github.com/vergoh/vnstat
+>
+> vnstat-docker：https://github.com/vergoh/vnstat-docker
+>
+> docker：https://hub.docker.com/r/vergoh/vnstat
+>
+> vnStat - a network traffic monitor for Linux and BSD。
+
+```markdown
+mkdir -p /opt/docker/vnstat
+
+docker run -d \
+    --restart=unless-stopped \
+    -p 8685:8685 \
+    -v /opt/docker/vnstat:/var/lib/vnstat \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /etc/timezone:/etc/timezone:ro \
+    --name vnstat \
+    vergoh/vnstat
+    
+# 访问
+http://server_ip:8685
+```
+
+
+
 # Uptime Kuma (轻量级网络监控)
 
 > [Uptime Kuma](https://uptime.kuma.pet/?utm_source=nicelinks.site) 
@@ -903,6 +931,8 @@ http://{server_ip}:5080
 > https://github.com/bytelang/kplayer-go
 >
 > KPlayer可以帮助你快速的在服务器上进行视频资源的循环直播推流，只需要简单对配置文件进行自定义即可开启直播推流
+
+
 
 # LAL 
 

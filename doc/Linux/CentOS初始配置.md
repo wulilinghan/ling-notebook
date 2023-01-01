@@ -31,8 +31,30 @@ DNS1=8.8.8.8  # 修改DNS服务器
 service network restart 
 ```
 
+
+
 # 2.安装epel-release软件包
 
 ```shell
 yum -y install epel-release
 ```
+
+
+
+# 3.centos7 升级 centos8
+
+```markdown
+#查看当前版本
+[root@localhost ~]# cat /etc/redhat-release
+CentOS Linux release 7.9.2009 (Core)
+
+#查看版本内核
+[root@localhost ~]# uname -r
+3.10.0-1160.80.1.el7.x86_64
+```
+
+参考：
+
+https://www.cnblogs.com/zeny/p/16578221.html#CentOS_79CentOS_85__4
+
+https://m2.zhugh.com:26800/centos76-sheng-jicentos83/#toc_3
