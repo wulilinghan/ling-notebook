@@ -103,6 +103,9 @@ ffmpeg -filters 										# 列出libavfilter中的过滤器。
 -c copy
 -c:a copy								
 -c:v copy
+
+# 设置编解码等工作的线程数
+-threads 2
 ```
 
 

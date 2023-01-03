@@ -926,6 +926,23 @@ http://{server_ip}:5080
 
 
 
+# pure-live（第三方观看直播程序）
+
+> Github：https://github.com/iyear/pure-live-core
+>
+> 一个想让直播回归纯粹的项目，没有礼物、粉丝团、弹窗，只有直播、弹幕
+>
+> 一个第三方观看直播程序
+
+```markdown
+mkdir -p /opt/docker/pure-live/{data,log}
+
+#安装
+docker run -d --name pure-live -p 8800:8800 -v /opt/docker/pure-live/data:/data -v /opt/docker/pure-live/log:/log  --restart=always iyear/pure-live:latest
+```
+
+
+
 # KPlayer
 
 > https://github.com/bytelang/kplayer-go
