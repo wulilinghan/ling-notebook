@@ -423,10 +423,13 @@ find / -name docker.sock 查找一下正确位置就好了
 	
 # 2.拉取mysql镜像到本地
 	docker pull mysql:<tag> (tag不加默认最新版本)
-	docker pull mysql （没指定版本,安装的最新的）
-	
+	docker pull mysql （没指定版本,安装的最新的）	
+
+# 创建数据目录
+mkdir -p /opt/docker/mysql/data
+
 # 3.运行mysql服务
-	docker run --name mysql --restart=always -v /home/mysql/data:/var/lib/mysql -v /home/mysql/conf.d:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:<tag>
+	docker run -d --name mysql --restart=always -v /opt/docker/mysql/data:/var/lib/mysql -v /opt/docker/mysql/conf.d:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=root@123 -p 3306:3306  mysql:5.7.40
 
 ```
 > 命令说明：

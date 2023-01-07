@@ -859,6 +859,67 @@ docker run --name sonic-server \
 
 ```
 
+# Halo（博客平台）
+
+> **Halo** [ˈheɪloʊ]，好用又强大的开源建站工具。
+>
+> 官方docker安装文档：https://docs.halo.run/getting-started/install/docker
+>
+> 主题地址：https://halo.run/themes
+>
+> 与 Halo 相关的周边生态资源列表：https://github.com/halo-sigs/awesome-halo
+>
+> 
+>
+> Halo 论坛：https://bbs.halo.run/
+>
+> demo地址：https://demo.halo.run/console/#/dashboard
+>
+> 账号：demo 	密码：P@ssw0rd123..
+
+
+
+目前 Halo 2 并未更新 Docker 的 latest 标签镜像，主要因为 Halo 2 不兼容 1.x 版本，防止使用者误操作。我们推荐使用固定版本的标签，比如 `halohub/halo:2.1.0`。
+
+```markdown
+# 创建数据目录
+mkdir -p  /opt/docker/halo2
+
+# 我这里使用mysql作为数据源
+docker run -d \
+  --name halo2-server \
+  -p 8090:8090 \
+  -v /opt/docker/halo2:/root/.halo2 \
+  halohub/halo:2.1.0 \
+  --spring.r2dbc.url=r2dbc:pool:mysql://192.168.3.50:3306/halo2 \
+  --spring.r2dbc.username=root \
+  --spring.r2dbc.password=root@123 \
+  --spring.sql.init.platform=mysql \
+  --halo.external-url=http://192.168.3.50:8090/ \
+  --halo.security.initializer.superadminuser=admin \
+  --halo.security.initializer.superadminpassword=P@88w0rd
+  
+# 机器宿主ip是192.168.3.50，映射宿主机端口8090，访问地址为
+博客地址：http://192.168.3.50:8090/
+控制台：http://192.168.3.50:8090/console/
+
+```
+
+## 安装插件
+
+> https://github.com/halo-sigs/awesome-halo
+
+### 流量统计分析工具
+
+- [plugin-umami](https://github.com/halo-sigs/plugin-umami) - Halo 2.0 对 Umami 的集成
+
+### 编辑器
+
+- [plugin-stackedit](https://github.com/halo-sigs/plugin-stackedit) - 为 Halo 2.0 集成 StackEdit 编辑器
+- [plugin-bytemd](https://github.com/halo-sigs/plugin-bytemd) - 为 Halo 2.0 集成 ByteMD 编辑器
+
+
+
 # Certs Maker (SSL 证书生成工具)
 
 > https://github.com/soulteary/certs-maker/blob/main/README_CN.md
