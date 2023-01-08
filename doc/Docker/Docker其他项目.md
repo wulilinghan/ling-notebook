@@ -23,9 +23,8 @@
 
 # UnblockNeteaseMusic
 
-项目地址：https://github.com/UnblockNeteaseMusic/server
-
-网易云历史版本：https://blog.amarea.cn/archives/netease-cloudmusic-history-version.html
+> 项目地址：https://github.com/UnblockNeteaseMusic/server
+> 网易云历史版本：https://blog.amarea.cn/archives/netease-cloudmusic-history-version.html
 
 ```markdown
 # 1.拉取命令

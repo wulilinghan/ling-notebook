@@ -3,7 +3,7 @@
 
 ## 1.什么是 Docker
 
-![image-20200404105433120](assets/image-20200404105433120.png)
+![image-20200404105433120](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134874.png)
 
 官网的介绍是“`Docker is the world’s leading software container platform.`” 官方给Docker的定位是一个`应用容器平台`。
 
@@ -35,7 +35,7 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 
 > 关于Docker与虚拟机的区别，我在网上找到的一张图，非常直观形象地展示出来，话不多说，直接上图。
 
-![image-20200410132957752](assets/image-20200410132957752.png)
+![image-20200410132957752](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134037.png)
 
 
 
@@ -56,7 +56,7 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 
 ## 4.Docker 的核心
 
-![image-20200404111908085](assets/image-20200404111908085-0291323.png)
+![image-20200404111908085](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134270.png)
 
 - `镜像:` 一个镜像代表一个应用环境,他是一个只读的文件,如 mysql镜像,tomcat镜像,nginx镜像等
 - `容器:` 镜像每次运行之后就是产生一个容器,就是正在运行的镜像,特点就是可读可写
@@ -176,7 +176,7 @@ $ sudo systemctl stop docker
 
 #### 6.3.1 docker 运行流程
 
-![image-20200404120356784](assets/image-20200404120356784.png)
+![image-20200404120356784](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134213.png)
 
 #### 6.3.2 docker配置阿里云镜像加速
 
@@ -351,7 +351,7 @@ centos ----> docker(引擎) ---->  mynginx(容器)
 Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: x509: certificate has expired or is not yet valid
 ```
 
-![image-20200602183429286](assets/image-20200602183429286.png)
+![image-20200602183429286](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134931.png)
 
 - 注意:**这个错误的原因在于是系统的时间和docker hub时间不一致,需要做系统时间与网络时间同步**
 
@@ -365,7 +365,7 @@ Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: 
 # 4.从新测试
 ```
 
-![image-20200602183718623](assets/image-20200602183718623.png)
+![image-20200602183718623](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134205.png)
 
 ### 8.1 安装Portainer
 
@@ -742,7 +742,7 @@ logstash_system：用于Logstash在Elasticsearch中存储监控信息时使用
 ![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202212122114744.png)
 
 - 如果启动出现如下错误
-- ![image-20200602184321790](assets/image-20200602184321790.png)
+- ![image-20200602184321790](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081135204.png)
 
 
 
@@ -849,13 +849,13 @@ chmod 776 /root/elasticsearch/config/elasticsearch.yml
 
 Dockerfile可以认为是**Docker镜像的描述文件，是由一系列命令和参数构成的脚本**。主要作用是**用来构建docker镜像的构建文件**。
 
-![image-20200404111908085](assets/image-20200404111908085.png)
+![image-20200404111908085](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081135638.png)
 
 - **通过架构图可以看出通过DockerFile可以直接构建镜像**
 
 ### 9.2 Dockerfile解析过程
 
-![image-20200603181253804](assets/image-20200603181253804.png)
+![image-20200603181253804](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081135941.png)
 
 ### 9.3 Dockerfile的保留命令
 
@@ -1017,7 +1017,7 @@ Dockerfile可以认为是**Docker镜像的描述文件，是由一系列命令�
 
 ##### 1.准备springboot可运行项目
 
-![image-20200605172151266](assets/image-20200605172151266.png)
+![image-20200605172151266](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081135630.png)
 
 ##### 2.将打包好的jar包上传至服务器中
 
@@ -1052,7 +1052,7 @@ CMD ["ems.jar"]
 http://10.15.0.8:8989/ems/login.html
 ```
 
-![image-20200605173141636](assets/image-20200605173141636.png)
+![image-20200605173141636](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081135885.png)
 
 ##### 7.接口docker容器之间网络互通问题
 
