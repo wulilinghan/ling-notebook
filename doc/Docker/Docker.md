@@ -611,8 +611,40 @@ source=oracle_vol为Host的持久化卷，若未提前创建会自动创建，�
 >
 > https://www.nginxwebui.cn/
 
+```markdown
+# 创建数据目录
+mkdir -p /opt/docker/nginxWebUI
+
+#启动
+docker run -d -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8081" --net=host --privileged=true  --name nginxWebUI cym1102/nginxwebui
 ```
-docker run -itd -v /opt/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8081" --net=host --privileged=true  --name nginxWebUI cym1102/nginxwebui
+
+#### 8.4.2 Nginx Proxy Manager
+
+> 官网：https://nginxproxymanager.com/
+>
+> Nginx proxy manager是一个很简单的反向代理工具。
+
+```markdown
+# 创建数据目录
+mkdir -p /opt/docker/nginx-proxy-manager/{data,letsencrypt}
+
+# 启动
+docker run -d --name nginx-proxy-manager \
+--restart unless-stopped \
+-p 80:80 \
+-p 443:443 \
+-p 81:81 \
+-v /opt/docker/nginx-proxy-manager/data:/data \
+-v /opt/docker/nginx-proxy-manager/letsencrypt:/etc/letsencrypt \
+jc21/nginx-proxy-manager:latest
+
+# 访问地址
+http://192.168.3.50:81
+
+Default Administrator User
+Email:    admin@example.com
+Password: changeme
 ```
 
 
@@ -1058,6 +1090,8 @@ http://10.15.0.8:8989/ems/login.html
 
 # Docker Compose
 
+## 简介
+
 Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。
 
 Compose 使用的三个步骤：
@@ -1085,5 +1119,27 @@ services:
     image: redis
 volumes:
   logvolume01: {}
+```
+
+## 安装
+
+运行以下命令以下载 Docker Compose 的当前稳定版本：
+
+```markdown
+# 要安装其他版本的 Compose，请替换 v2.15.1
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.15.1/docker-
+compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# 或者使用 Docker Compose 镜像
+curl -L https://get.daocloud.io/docker/compose/releases/download/v2.15.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
+#将可执行权限应用于二进制文件
+sudo chmod +x /usr/local/bin/docker-compose
+
+#创建软链
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+#测试是否安装成功
+docker-compose version
 ```
 

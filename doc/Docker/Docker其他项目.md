@@ -38,6 +38,35 @@ docker run --name unblock-netease-music --restart always -p 18080:8080 -e ENABLE
 
 # AdGuardHome
 
+> GitHub：https://github.com/AdguardTeam/AdGuardHome
+>
+> DockerHub：https://hub.docker.com/r/adguard/adguardhome
+>
+> 
+>
+>  AdGuard Home是一款全网广告拦截与反跟踪软件。
+
+
+
+```markdown
+#
+mkdir -p /opt/docker/adguardhome/{work,conf}
+
+#
+docker run -d --name adguardhome \
+--restart unless-stopped \
+-v /opt/docker/adguardhome/work:/opt/adguardhome/work \
+-v /opt/docker/adguardhome/conf:/opt/adguardhome/conf \
+-p 53:53/tcp -p 53:53/udp\
+-p 67:67/udp -p 68:68/udp\
+-p 80:80/tcp -p 443:443/tcp -p 443:443/udp -p 3000:3000/tcp\
+-p 853:853/tcp\
+-p 784:784/udp -p 853:853/udp -p 8853:8853/udp\
+-p 5443:5443/tcp -p 5443:5443/udp\
+adguard/adguardhome
+```
+
+
 ```
 上游 DNS 服务器：
 tls://dns.pub
@@ -74,6 +103,227 @@ https://easylist-downloads.adblockplus.org/easyprivacy.txt
 https://raw.githubusercontent.com/hopol/ChinaList2.0/master/ChinaList2.0.txt
 
 ```
+
+# PowerDNS
+
+## 1.PowerDNS
+
+> GitHub：https://github.com/PowerDNS/pdns
+>
+> Docker文档：https://github.com/PowerDNS/pdns/blob/master/Docker-README.md
+>
+> 官方pdns-auth：https://hub.docker.com/r/powerdns/pdns-auth-master
+>
+> 官方pdns-recursor：https://hub.docker.com/r/powerdns/pdns-recursor-master
+>
+> 官方pdns-dnsdist：https://hub.docker.com/r/powerdns/dnsdist-master
+>
+> 
+>
+> 参考
+>
+> - [内网私有域名解析](https://www.u.tsukuba.ac.jp/~s2036012/tech/webmaster/internal-dns.html#%E5%9F%9F%E5%90%8D%E5%92%8C%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90)
+> - [使用PowerDNS实现内网DNS解析](https://www.cnblogs.com/charnet1019/p/16005184.html)
+> - [PowerDNS安装部署](https://book.gxd88.cn/dns/install-powerdns)
+
+
+
+
+
+
+
+PowerDNS全家桶中包含PowerDNS Authoritative、Recursor、DNSList三个组件。
+
+- PowerDNS Authoritative：DNS权威服务器，用于提供企业私有域名的管理和解析；
+- PowerDNS Recursor：DNS递归服务器，用于接受客户端DNS查询请求，并根据目标域转发配置转发到不同的上游DNS服务器进行解析，并对DNS解析记录进行缓存；
+- PowerDNS-Admin：DNS权威服务器的Web管理页面；
+
+
+
+```markdown
+# 创建数据目录 
+mkdir -p /opt/docker/pdns/config && touch /opt/docker/pdns/config/pdns.conf
+
+# powerdns/pdns-auth-master
+docker run -d --name powerdns \
+  -p 5300:5300 \
+  -p 5300:5300/udp \
+  -p 8888:8888 \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /opt/docker/pdns/config/pdns.conf:/etc/powerdns/pdns.conf \
+  powerdns/pdns-auth-master
+  
+```
+
+> PowerDNS Authoritative Server 配置文件 `/etc/powerdns/pdns.conf`
+
+### pdns.conf
+
+```properties
+api=yes
+#自定义密钥，PowerDNS-Admin settings -> PDNS API KEY
+api-key=qwerty 
+api-logfile=/var/log/pdns-api.log
+config-dir=/etc/powerdns
+guardian=yes
+include-dir=/etc/powerdns/pdns.d
+
+launch=gmysql
+gmysql-host=192.168.3.50
+gmysql-port=3306
+gmysql-dbname=pdns
+gmysql-user=root
+gmysql-password=root
+
+local-address=0.0.0.0
+local-port=5300
+
+setgid=pdns
+setuid=pdns
+#master=yes
+#master=no
+
+webserver=yes
+webserver-address=0.0.0.0
+webserver-allow-from=0.0.0.0/0
+# PowerDNS-Admin settings -> PDNS API URL
+webserver-port=8888
+
+default-ttl=3600
+```
+
+> 我这里使用mysql数据库
+
+
+
+## 2.PowerDNS Recursor
+
+> Docker：https://hub.docker.com/r/powerdns/pdns-recursor-master
+
+```markdown
+# 创建数据目录 
+mkdir -p /opt/docker/pdns-recursor/config && touch /opt/docker/pdns-recursor/zones && touch /opt/docker/pdns-recursor/config/recursor.conf
+
+# powerdns/pdns-recursor-master
+docker run -d --name powerdns-recursor \
+  -p 5301:5301 \
+  -p 5301:5301/udp \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /opt/docker/pdns-recursor/zones:/etc/pdns-recursor/zones \
+  -v /opt/docker/pdns-recursor/config/recursor.conf:/etc/powerdns/recursor.conf \
+  powerdns/pdns-recursor-master
+```
+
+> Powerdns Recursor的配置文件为`/etc/powerdns/recursor.conf`
+>
+> 上面配置映射不行就用这个试试`/etc/pdns-recursor/recursor.conf`
+
+### recursor.conf
+
+> https://docs.powerdns.com/recursor/settings.html#
+
+```properties
+#对应权威服务器的allow-recursion 允许哪些ip进行递归
+allow-from=0.0.0.0/0     
+#哪些域名需要自己的权威服务器来解析，格式：域名=权威服务器ip:端口
+#forward-zones=mydomain.com=192.168.3.50:5300    
+#也可以使用配置文件来配置哪些域名强制走内网dns解析
+forward-zones-file=/etc/pdns-recursor/zones
+# 除forward-zones外其他所有的请求发至223.5.5.5,202.96.134.133,8.8.8.8
+forward-zones-recurse=.=223.5.5.5,.=202.96.134.133,.=8.8.8.8          
+
+local-address=0.0.0.0
+local-port=5301
+
+#setgid=pdns-recursor
+#setuid=pdns-recursor
+```
+
+### zones
+
+> 后面的地址对应自建的权威服务器ip:端口
+
+```
++b0x0.ling=192.168.3.50:5300
+```
+
+
+
+## 3.PowerDNS-Admin
+
+> Github：https://github.com/PowerDNS-Admin/PowerDNS-Admin
+>
+> Docker：https://hub.docker.com/r/powerdnsadmin/pda-legacy
+
+```markdown
+#  powerdnsadmin/pda-legacy
+docker run -d --name powerdns-admin \
+-v /etc/localtime:/etc/localtime:ro \
+-v /etc/timezone:/etc/timezone:ro \
+-e SQLALCHEMY_DATABASE_URI=mysql://root:root@192.168.3.50/pdns \
+-e GUNICORN_TIMEOUT=60 \
+-e GUNICORN_WORKERS=2 \
+-e GUNICORN_LOGLEVEL=DEBUG \
+-p 9191:80 \
+powerdnsadmin/pda-legacy
+```
+
+> SQLALCHEMY_DATABASE_URI
+>
+> The database URI that should be used for the connection. Examples:
+>
+> - sqlite:////tmp/test.db
+> - mysql://username:password@server/db
+
+
+
+## docker-compose
+
+```yaml
+---
+version: '2.0'
+services:
+  recursor:
+    build:
+      context: .
+      dockerfile: Dockerfile-recursor
+    environment:
+      - PDNS_RECURSOR_API_KEY
+    ports:
+      - "2053:53"
+      - "2053:53/udp"
+      - "8082:8082"
+
+  dnsdist:
+    build:
+      context: .
+      dockerfile: Dockerfile-dnsdist
+    environment:
+      - DNSDIST_API_KEY
+    links:
+      - recursor
+      - auth
+    ports:
+      - "3053:53"
+      - "3053:53/udp"
+      - "5199:5199"
+      - "8083:8083"
+
+  auth:
+    build:
+      context: .
+      dockerfile: Dockerfile-auth
+    environment:
+      - PDNS_AUTH_API_KEY
+    ports:
+      - "1053:53"
+      - "1053:53/udp"
+      - "8081:8081"
+```
+
+
+
+
 
 # OpenWrt
 
@@ -278,7 +528,7 @@ docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc
 ```
 
 
-# Dashy （类似网址导航）
+# Dashy （仪表板应用程序）
 
 > https://github.com/lissy93/dashy
 >
@@ -795,6 +1045,68 @@ systemctl restart netdata
 
 
 
+# Ward（单服务器监控工具）
+
+> 官方项目地址：https://github.com/B-Software/Ward
+>
+> 第三方fork：https://github.com/AntonyLeons/Ward
+>
+> Ward 是一个使用 Java 开发的简单而简约的服务器监控工具。Ward 支持自适应设计系统，它还支持深色主题，它只显示服务器的主要信息。Ward 在所有流行的操作系统上运行良好，因为它使用 [OSHI](https://github.com/oshi/oshi)。
+
+
+
+```Markdown
+# 创建数据目录
+mkdir -p /opt/docker/Ward
+
+# 安装，官方镜像是ward，但是疑似遗弃了，这里使用antonyleons/ward
+docker run -d --name ward  \
+-p 4000:4000 \
+-e WARD_PORT=4000 \
+--privileged=true \
+--restart always \
+antonyleons/ward
+
+```
+
+# ServerStatus（多服务器监控）
+
+> 项目地址：https://github.com/cppla/ServerStatus
+>
+> ServerStatus中文版是一个酷炫高逼格的云探针、云监控、服务器云监控、多服务器探针~。
+
+
+
+# Glances（系统监控工具）
+
+> 官网：https://nicolargo.github.io/glances/
+>
+> 项目地址：https://github.com/nicolargo/glances
+>
+> DockerHub：https://hub.docker.com/r/nicolargo/glances
+>
+> Glances 是一个跨平台的、基于命令行的系统监控工具，由 Python 语言编写，使用 Python 的 psutil 库来抓取系统数据。可以监控 CPU、负载均衡、内存、网络设备、磁盘 I/O、进程和文件系统使用等。
+
+```markdown
+# 创建数据目录
+mkdir -p /opt/docker/glances
+
+# 控制台查看（临时） ctrl+c 退出
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host --network host -it nicolargo/glances:latest-full
+
+#启动
+docker run --name glances -d --restart=always \
+-p 61208-61209:61208-61209 \
+-e GLANCES_OPT="-w" \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
+--pid host \
+--network host \
+nicolargo/glances:3.3.0.4-full
+
+```
+
+
+
 # Flare (网址导航)
 
 > https://github.com/soulteary/docker-flare
@@ -916,6 +1228,51 @@ docker run -d \
 
 - [plugin-stackedit](https://github.com/halo-sigs/plugin-stackedit) - 为 Halo 2.0 集成 StackEdit 编辑器
 - [plugin-bytemd](https://github.com/halo-sigs/plugin-bytemd) - 为 Halo 2.0 集成 ByteMD 编辑器
+
+### 图片选择
+
+需要注册 https://unsplash.com/developers 获取Access Key，在unsplash设置中配置token
+
+- [plugin-unsplash](https://github.com/halo-sigs/plugin-unsplash) - Halo 2.0 的 Unsplash 插件，支持从 Unsplash 选择图片
+
+### 代码高亮
+
+- [plugin-highlightjs](https://github.com/halo-sigs/plugin-highlightjs) - 提供对 [highlight.js](https://github.com/highlightjs/highlight.js) 的集成，支持在内容页高亮显示代码块
+
+### 评论组件
+
+- [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) - Halo 2.0 的前台评论组件插件
+
+# go-md-book（markdown博客）
+
+> Github地址：https://github.com/hedongshu/go-md-book
+>
+> DockerHub：https://hub.docker.com/r/willgao/markdown-blog
+>
+> 基于 go 快速将 markdown 文件发布成可以web访问的book。
+
+
+
+```markdown
+# 创建数据目录
+mkdir -p /opt/docker/md-blog/{md,cache,config}
+
+# ctrl+c 结束
+docker run -it --name md-blog \
+-p 5060:5006 \
+-v /opt/docker/md-blog/md:/md \
+-v /opt/docker/md-blog/cache:/cache \
+willgao/markdown-blog:latest \
+-t "WuLiLing'Blog"
+
+#启动
+docker run -d --name md-blog \
+-p 5060:5006 \
+-v /opt/docker/md-blog/md:/md \
+-v /opt/docker/md-blog/cache:/cache \
+willgao/markdown-blog:latest \
+-t "WuLiLing'Blog"
+```
 
 
 
