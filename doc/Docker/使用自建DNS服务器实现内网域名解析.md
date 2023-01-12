@@ -1,5 +1,3 @@
-
-
 # PowerDNS
 
 使用自建DNS服务器实现内网域名解析
@@ -63,7 +61,7 @@ gmysql-dbname=pdns
 gmysql-user=root
 gmysql-password=root
 
-#pdns服务监听的地址，多个IP可以使用英文逗号隔开
+#pdns服务监听的地址
 local-address=0.0.0.0
 local-port=5300
 
@@ -119,7 +117,6 @@ docker run -d --name powerdns-recursor \
   -v /opt/docker/pdns-recursor/zones:/etc/pdns-recursor/zones \
   -v /opt/docker/pdns-recursor/config/recursor.conf:/etc/powerdns/recursor.conf \
   powerdns/pdns-recursor-master
-  
 ```
 
 > Powerdns Recursor的配置文件为`/etc/powerdns/recursor.conf`
@@ -146,6 +143,7 @@ dnssec=off
 #服务监听地址
 local-address=0.0.0.0
 local-port=5301
+#local-port=53
 
 webserver=yes
 webserver-address=0.0.0.0
@@ -384,4 +382,17 @@ powerdns-admin错误日志：
 
 > 表结构：https://doc.powerdns.com/md/authoritative/backend-generic-mysql/
 
-		发现官方文档给的表结构也没日志中报错的表字段，看来不能用 latest 版本镜像，更换镜像版本为 powerdns/pdns-auth-master:20220225 解决此问题
+​		发现官方文档给的表结构也没日志中报错的表字段，看来不能用 latest 版本镜像，更换镜像版本为 powerdns/pdns-auth-master:20220225 解决此问题
+
+### 4.2 recursor递归服务器使用53作为监听端口启动报错
+
+![image-20230113001712031](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301130017061.png)
+
+
+
+## 参考
+
+> [内网私有域名解析](https://www.u.tsukuba.ac.jp/~s2036012/tech/webmaster/internal-dns.html#%E7%A7%81%E6%9C%89%E5%9F%9F%E5%90%8D%E8%BD%AC%E5%8F%91)
+>
+> [使用PowerDNS实现内网DNS解析](https://www.cnblogs.com/charnet1019/p/16005184.html)
+
