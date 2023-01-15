@@ -30,7 +30,36 @@ service network restart
 
 
 
-# 安装epel-release软件包
+# Yum源
+
+## 配置网络yum源
+
+### 备份
+
+```markdown
+cd /etc/yum.repos.d
+
+[root@localhost yum.repos.d]# ll
+总用量 52
+-rw-r--r--. 1 root root 1664 11月 23 2020 CentOS-Base.repo
+-rw-r--r--. 1 root root 1309 11月 23 2020 CentOS-CR.repo
+-rw-r--r--. 1 root root  649 11月 23 2020 CentOS-Debuginfo.repo
+-rw-r--r--. 1 root root  314 11月 23 2020 CentOS-fasttrack.repo
+-rw-r--r--. 1 root root  630 11月 23 2020 CentOS-Media.repo
+-rw-r--r--. 1 root root 1331 11月 23 2020 CentOS-Sources.repo
+-rw-r--r--. 1 root root 8515 11月 23 2020 CentOS-Vault.repo
+-rw-r--r--. 1 root root  616 11月 23 2020 CentOS-x86_64-kernel.repo
+-rw-r--r--. 1 root root 1919 12月 20 05:35 docker-ce.repo
+-rw-r--r--. 1 root root 1358 9月   5 2021 epel.repo
+-rw-r--r--. 1 root root 1457 9月   5 2021 epel-testing.repo
+
+# 备份
+mkdir repo_bak && mv *.repo repo_bak/ 
+```
+
+
+
+### 安装epel-release软件包
 
 ```shell
 yum -y install epel-release

@@ -144,6 +144,8 @@ docker network create -d macvlan --subnet=192.168.3.0/24 --gateway=192.168.3.1 -
 
 ### 3.安装sulinggg/openwrt
 
+> Dockerhub：https://hub.docker.com/r/sulinggg/openwrt
+
 这里安装的是 [sulinggg/openwrt](https://hub.docker.com/r/sulinggg/openwrt)
 
 查看内核版本`cat /proc/version`，我的的是**x86_64** ，不同的平台拉取不同的镜像
@@ -620,13 +622,13 @@ http://192.168.3.50:3000/
 访问 http://192.168.3.50:8080/docker/  这个页面会列出 Docker 的基本信息和运行的容器情况
 ```
 
-# ntopng (流量监控)
+![image-20230113215846905](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301132158969.png)
+
+# ~~ntopng (流量监控)~~
 
 > https://github.com/ntop/ntopng
 >
 > ntopng 是一款网络流量监控工具，提供了直观的 Web 用户界面，用于浏览实时和历史网络流量信息。
-
-
 
 ```markdown
 # 
@@ -647,7 +649,7 @@ http://192.168.3.50:3000
 
 ```
 
-# vnstat（网络流量监控）
+# ~~vnstat（网络流量监控）~~
 
 > vnstat：https://github.com/vergoh/vnstat
 >
@@ -677,9 +679,11 @@ http://server_ip:8685
 
 # Uptime Kuma (轻量级网络监控)
 
-> [Uptime Kuma](https://uptime.kuma.pet/?utm_source=nicelinks.site) 
-> 一个开源自托管监控工具
-> 可监控 HTTP(s) / TCP / Ping / [DNS](https://www.isolves.com/e/tags/?tagname=DNS) 等网络
+> Github：https://github.com/louislam/uptime-kuma
+>
+> Dockerhub：https://hub.docker.com/r/louislam/uptime-kuma
+>
+> 一个开源自托管监控工具，可监控 HTTP(s) / TCP / Ping / [DNS](https://www.isolves.com/e/tags/?tagname=DNS) 等网络
 > 支持 Telegram、Discord、Gotify、Slack、Pushover、电子邮件 (SMTP)多种通知方式
 
 ```markdown
@@ -824,7 +828,7 @@ systemctl restart netdata
 
 
 
-# Ward（单服务器监控工具）
+# ~~Ward（单服务器监控工具）~~
 
 > 官方项目地址：https://github.com/B-Software/Ward
 >
@@ -845,8 +849,11 @@ docker run -d --name ward  \
 --privileged=true \
 --restart always \
 antonyleons/ward
-
 ```
+
+
+
+![image-20230113215700317](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301132157412.png)
 
 # ServerStatus（多服务器监控）
 
