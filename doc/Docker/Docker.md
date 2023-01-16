@@ -1143,3 +1143,155 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker-compose version
 ```
 
+
+
+# Docker buildx
+
+> Github：https://github.com/docker/buildx/#installing
+> 构建多平台镜像
+
+## buildx安装与启用
+
+### 安装
+
+#### Windows and macOS
+
+Docker Buildx is included in [Docker Desktop](https://docs.docker.com/desktop/) for Windows and macOS.
+
+#### Linux
+
+> Github下载页：https://github.com/docker/buildx/releases/latest
+
+```markdown
+# 查看有没有安装 buildx
+docker buildx version
+
+---------------------------------------------------------
+[root@localhost ~]# docker buildx version
+docker: 'buildx' is not a docker command.
+See 'docker --help'
+---------------------------------------------------------
+
+# 1.安装Docker Buildx
+mkdir -pv ~/.docker/cli-plugins/
+
+# 2.一般自己服务器上没配置梯子，可能下不动 ，我是Windows上开梯子手动下载放到目录下的
+wget -O ~/.docker/cli-plugins/docker-buildx \
+    https://github.com/docker/buildx/releases/download/v0.10.0/buildx-v0.10.0.linux-amd64
+
+# 3.
+ chmod +x ~/.docker/cli-plugins/docker-buildx
+
+# 再次执行 docker buildx version
+[root@localhost ~]# docker buildx version
+github.com/docker/buildx v0.10.0 876462897612d36679153c3414f7689626251501
+
+```
+
+如果本地的 `docker` 版本高于 19.03，可以通过以下命令直接在本地构建并安装，这种方式更为方便：
+
+```
+# 1
+DOCKER_BUILDKIT=1 docker build --platform=local -o . "https://github.com/docker/buildx.git"
+# 2
+mkdir -p ~/.docker/cli-plugins
+# 3
+mv buildx ~/.docker/cli-plugins/docker-buildx
+```
+
+### 启用buildx
+
+```markdown
+# 下载配置，不然问题2
+wget -O ~/.docker/config.json   https://github.com/docker/buildx/releases/download/v0.10.0/buildx-v0.10.0.linux-amd64.provenance.json
+
+# 启用
+docker buildx install
+```
+
+### 创建builder实例
+
+```markdown
+# 先要创建用于执行构建任务的实例 ，不然问题1
+docker buildx create --platform linux/amd64,linux/arm64 --name multi-builder
+
+# 刚创建的 builder 处于 inactive 状态
+docker buildx ls
+```
+
+![image-20230116201517567](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301162015601.png)
+
+```markdown
+# 启动示例，multi-builder是我创建的builder实例名
+docker buildx inspect --bootstrap multi-builder
+```
+![image-20230116203109420](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301162031468.png)
+
+## 使用buildx构建镜像
+
+打包 go-markdown-book 项目，这是一个go项目，记得要安装go环境，下载源码方法服务器上，然后进入源码根目录，执行以下命令
+
+> https://github.com/hedongshu/go-markdown-book
+
+```markdown
+# 进入源码根目录,陆续执行以下命令
+chmod +x package.sh
+#因为我是在Windows下载的源码还用idea打开了脚本文件，Windows的换行符跟linux不一样，这里转换一下换行符，不然执行可能报错
+sed -i 's/\r//'  package.sh
+# 编译
+make 
+make package-all
+
+# 配置dockerhub私有仓库
+docker login
+```
+> 出现 Login Succeeded就说明我们登录成功
+>
+> 注：身份验证凭证被存储在操作用户目录的中 ~/.docker/config.json
+
+
+![image-20230116205733996](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301162057035.png)
+
+```markdown
+#这里要改一下源码中 makefile 中 docker-push 的 命令中的dockerhub仓库为自己的，不然推送到别人仓库肯定认证失败 ,指定multi-builder实例构建
+docker buildx build --builder multi-builder --platform linux/arm64,linux/amd64 -t vling/markdown-blog:latest . --push
+
+# 推送镜像
+make docker-push
+```
+![image-20230116211753123](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301162117181.png)
+
+
+
+## 问题
+
+### 问题1
+
+buildx报错
+
+![image-20230116192753582](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301161927620.png)
+
+### 问题2
+
+![image-20230116195203052](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301161952090.png)
+
+### 问题3
+
+创建buildx实例原先命令如下：
+
+```
+docker buildx create --driver docker-container --platform linux/amd64,linux/arm64 --name multi-builder
+```
+
+我把`--driver docker-container`删除，删除原实例，重新创建就可以了
+
+```
+# 删除，multi-builder 是build实例名
+docker buildx rm multi-builder
+# 重新创建
+docker buildx create --platform linux/amd64,linux/arm64 --name multi-builder
+```
+
+http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/buildx_buildkit_multi-builder0/json
+
+![image-20230116202013431](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301162020472.png)

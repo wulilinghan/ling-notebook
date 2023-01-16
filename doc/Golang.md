@@ -1,4 +1,42 @@
-# 环境变量
+# Linux安装Go
+
+> 下载页面：https://go.dev/dl/
+
+创建gopath
+
+```
+mkdir -p /root/gopath/{src,pkg,bin}
+```
+
+解压到`/usr/lib`目录下
+
+```
+tar -xzf go1.19.2.linux-amd64.tar.gz -C /usr/lib
+```
+
+配置环境变量
+
+```undefined
+vi /etc/profile
+
+添加以下内容
+# GOROOT
+export GOROOT=/usr/lib/go
+# GOPATH
+export GOPATH=/root/gopath/
+# GOPATH bin
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+#配置生效
+source /etc/profile
+
+# 更换为七牛云代理，提升包下载速度
+go env -w GOPROXY=https://goproxy.cn,direct
+```
+
+
+
+# Go Env
 
 打印环境变量
 
@@ -33,3 +71,38 @@ go env -w GOPROXY=https://goproxy.cn,direct
 go env -w GOPATH=D:\work-go
 ```
 
+
+
+# Go项目编译
+
+### windows服务器
+
+> ```
+> go build [-o 输出名] [-i] [编译标记] [包名]
+> ```
+
+```
+go build -o ./build/markdown-book-linux-amd64/markdown-book main.go  
+```
+
+编译后会在同级目录生成可执行文件
+
+```
+./main.exe
+```
+
+### linux服务器
+
+需要go环境，然后将项目源码拷贝到服务器上
+
+```
+go build main.go
+```
+
+> 下载包很慢的话，看看goproxy有没有换成国内下载地址
+
+编译后会在同级目录生成可执行文件
+
+```
+./main
+```

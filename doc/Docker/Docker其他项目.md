@@ -1037,8 +1037,6 @@ docker run -d \
 >
 > 基于 go 快速将 markdown 文件发布成可以web访问的book。
 
-
-
 ```markdown
 # 创建数据目录
 mkdir -p /opt/docker/md-blog/{md,cache,config}
@@ -1057,6 +1055,13 @@ docker run -d --name md-blog \
 -v /opt/docker/md-blog/md:/md \
 -v /opt/docker/md-blog/cache:/cache \
 willgao/markdown-blog:latest \
+-t "WuLiLing'Blog"
+
+docker run -d --name md-blog \
+-p 5006:5006 \
+-v /opt/docker/md-blog/md:/md \
+-v /opt/docker/md-blog/cache:/cache \
+vling/markdown-blog:latest \
 -t "WuLiLing'Blog"
 ```
 
