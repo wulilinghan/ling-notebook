@@ -1171,3 +1171,30 @@ docker run -d --name pure-live -p 8800:8800 -v /opt/docker/pure-live/data:/data 
 docker run -it -p 1935:1935 -p 8080:8080 -p 4433:4433 -p 5544:5544 -p 8083:8083 -p 8084:8084 -p 30000-30100:30000-30100/udp q191201771/lal /lal/bin/lalserver -c /lal/conf/lalserver.conf.json
 ```
 
+# AList
+
+> 文档：https://alist.nn.ci/zh/
+>
+> 一个支持多种存储，支持网页浏览和 WebDAV 的文件列表程序
+
+简而言之就是支持将许多网盘直接挂载到本地，浏览本地文件一样
+
+```
+#启动
+docker run -d --restart=always -v /opt/docker/alist:/opt/alist/data -p 5244:5244 -e PUID=0 -e PGID=0 -e UMASK=022 --name="alist" xhofe/alist:v3.8.0
+
+#查看账号密码
+docker exec -it alist ./alist admin
+
+[root@localhost ~]# docker exec -it alist ./alist admin
+INFO[2023-01-17 12:06:37] reading config file: data/config.json
+INFO[2023-01-17 12:06:37] load config from env with prefix: ALIST_
+INFO[2023-01-17 12:06:37] init logrus...
+WARN[2023-01-17 12:06:37] not enable search
+INFO[2023-01-17 12:06:37] admin user's info:
+username: admin
+password: n8hLPrBJ
+
+
+```
+
