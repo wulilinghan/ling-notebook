@@ -58,14 +58,43 @@ mkdir repo_bak && mv *.repo repo_bak/
 ```
 
 
-
 ### 安装epel-release软件包
 
 ```shell
 yum -y install epel-release
 ```
 
+# 安装vncserver
+```bash
+yum -y install tigervnc-server
 
+# 设置密码
+vncserver
+
+-----------------------------------------------------------------
+[root@localhost ~]# vncserver
+
+You will require a password to access your desktops.
+
+Password:
+Verify:
+Would you like to enter a view-only password (y/n)? n
+A view-only password is not used
+
+New 'localhost.localdomain:1 (root)' desktop is localhost.localdomain:1
+
+Creating default startup script /root/.vnc/xstartup
+Creating default config /root/.vnc/config
+Starting applications specified in /root/.vnc/xstartup
+Log file is /root/.vnc/localhost.localdomain:1.log
+-----------------------------------------------------------------
+
+1.Would you like to enter a view-only password (y/n)? 
+设置成 n ，设置 y 的话,vnc连接后将无法使用鼠标和键盘与VNC实例进行交互
+
+2.New 'localhost.localdomain:1 (root)' desktop is localhost.localdomain:1
+注意控制台输出的 localhost.localdomain:1 后面的 `:1`，这是vnc服务器的显示端口号。vnc服务器将会监听TCP端口`5901`，即5900 + 1。
+```
 
 # 禁用 SELinux 
 
@@ -121,7 +150,7 @@ Controlling terminal:           unconfined_u:object_r:user_devpts_t:s0
 Enforcing
 ```
 
-> Current mode:          enforcing
+>第七行  Current mode:          enforcing
 
 ## 永久关闭 SELinux 
 
