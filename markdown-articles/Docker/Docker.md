@@ -367,14 +367,14 @@ Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: 
 
 ![image-20200602183718623](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img/202301081134205.png)
 
-### 8.1 安装Portainer
+### 8.1 安装Portainer（图形化管理）
 
 ```markdown
 # 1.
 mkdir -p /opt/docker/portainer
 
 # 2.安装命令
-docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/docker/portainer:/data -d portainer/portainer
+docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/docker/portainer:/data -d portainer/portainer-ce
 
 # 3.访问地址
 http://192.168.3.50:9000/
