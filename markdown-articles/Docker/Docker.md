@@ -564,17 +564,19 @@ source=oracle_vol为Host的持久化卷，若未提前创建会自动创建，�
 	
 # 6.加载外部自定义配置启动redis容器
 	默认情况下redis官方镜像中没有redis.conf配置文件 需要去官网下载指定版本的配置文件
-	1. cd /home 									 进去home文件夹
-	   wget http://download.redis.io/releases/redis-5.0.8.tar.gz  下载官方安装包
-	   tar -zxf redis-5.0.8.tar.gz                   解压
-	   mkdir -p /home/redis                          创建redis文件夹
-	   cp /home/redis-5.0.8/redis.conf /root/redis   将官方安装包中配置文件拷贝到/root/redis目录
-	3. 修改需要自定义的配置 
-		 bind 0.0.0.0 		开启远程权限
-		 appendonly yes 	开启aof持久化
+-- 1.进去opt文件夹并下载官方安装包
+cd /opt && wget http://download.redis.io/releases/redis-5.0.8.tar.gz					--- 2.解压
+tar -zxf redis-5.0.8.tar.gz                   
+-- 3.创建挂载目录
+mkdir -p /opt/docker/redis
+-- 4.将官方安装包中配置文件拷贝到要挂载的目录
+cp /opt/redis-5.0.8/redis.conf /opt/docker/redis   
+-- 5.修改需要redis.conf 
+bind 0.0.0.0 		开启远程权限
+appendonly yes 	开启aof持久化
 
 # 7.将数据目录挂在到本地保证数据安全
-	docker run --name redis --restart=always -v /home/redis/data:/data -v /home/redis/redis.conf:/usr/local/etc/redis/redis.conf -p 6379:6379 -d redis redis-server 					/usr/local/etc/redis/redis.conf  
+	docker run -d --name redis --restart=always -p 6379:6379 -v /opt/docker/redis/data:/data -v /opt/docker/redis/redis.conf:/usr/local/etc/redis/redis.conf  redis:5.0 
 ```
 
 ### 8.4 安装Nginx
@@ -601,7 +603,7 @@ source=oracle_vol为Host的持久化卷，若未提前创建会自动创建，�
     docker stop nginx
     docker rm nginx
 # 4.挂在nginx配置以及html到宿主机外部
-	docker run --name nginx -v /opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/docker/nginx/html:/usr/share/nginx/html -p 80:80 -d nginx		
+	docker run -d --name nginx -p 80:80 -v /opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/docker/nginx/html:/usr/share/nginx/html   nginx		
 	
 	docker安装nginx 使用起来有点麻烦 许多路径需要映射
 ```
