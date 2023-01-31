@@ -1,0 +1,30 @@
+version: "3.8"
+volumes:
+  data:
+  config:
+networks:
+  es:
+services:
+  elasticsearch:
+    image: elasticsearch:7.14.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - "es"
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - data:/usr/share/elasticsearch/data
+      - config:/usr/share/elasticsearch/config
+      - ./ik-7.14.0:/usr/share/elasticsearch/plugins/ik-7.14.0
+
+  kibana:
+    image: kibana:7.14.0
+    ports:
+      - "5601:5601"
+    networks:
+      - "es"
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
