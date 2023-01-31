@@ -3,3 +3,4 @@
 *.js linguist-language=md
 *.xml linguist-language=md
 *.css linguist-language=md
+*.java linguist-language=md
