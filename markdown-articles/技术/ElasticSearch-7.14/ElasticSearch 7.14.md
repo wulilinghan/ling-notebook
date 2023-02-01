@@ -65,7 +65,7 @@ Shay的妻子依旧等待着她的`食谱搜索……`
 - https://www.elastic.co/cn/start
 ```
 
-![image-20210816103401531](ElasticSearch%207.14.assets/image-20210816103401531.png)
+![image-20210816103401531](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012310254.png)
 
 ```markdown
 # 2.安装ES不用使用root用户,创建普通用户
@@ -106,7 +106,7 @@ drwxr-xr-x. 10 chenyn chenyn       167 8月  16 11:07 elasticsearch-7.14.0
 - plugins 插件目录
 ```
 
-![image-20210816131801300](ElasticSearch%207.14.assets/image-20210816131801300.png)
+![image-20210816131801300](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012316274.png)
 
 ```markdown
 # 5.启动ES服务
@@ -116,7 +116,7 @@ drwxr-xr-x. 10 chenyn chenyn       167 8月  16 11:07 elasticsearch-7.14.0
 [chenyn@localhost ~]$ ./elasticsearch-7.14.0/bin/elasticsearch
 ```
 
-![image-20210816132834613](ElasticSearch%207.14.assets/image-20210816132834613.png)
+![image-20210816132834613](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012316021.png)
 
 ```markdown
 - 这个错误时系统jdk版本与es要求jdk版本不一致,es默认需要jdk11以上版本,当前系统使用的jdk8,需要从新安装jdk11才行!
@@ -135,13 +135,13 @@ $ vim /etc/profile
 - source /etc/profile
 ```
 
-![image-20210816135925943](ElasticSearch%207.14.assets/image-20210816135925943.png)
+![image-20210816135925943](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012310636.png)
 
 ```markdown
 # 7.从新启动ES服务
 ```
 
-![image-20210816140453458](ElasticSearch%207.14.assets/image-20210816140453458.png)
+![image-20210816140453458](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012310580.png)
 
 ```markdown
 # 8.ES启动默认监听9200端口,访问9200
@@ -151,7 +151,7 @@ $ vim /etc/profile
 $ curl http://localhost:9200
 ```
 
-![image-20210816143542689](ElasticSearch%207.14.assets/image-20210816143542689.png)
+![image-20210816143542689](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012310622.png)
 
 ##### 开启远程访问
 
@@ -164,7 +164,7 @@ $ curl http://localhost:9200
 $ vim elasticsearch.yml
 ```
 
-![image-20210816145724047](ElasticSearch%207.14.assets/image-20210816145724047.png)
+![image-20210816145724047](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012310730.png)
 
 ```markdown
 # 2.重新启动ES服务
@@ -176,7 +176,7 @@ $ vim elasticsearch.yml
 	`bootstrap check failure [4] of [4]: the default discovery settings are unsuitable for production use; at least one of [discovery.seed_hosts, discovery.seed_providers
 ```
 
-![image-20210816150025038](ElasticSearch%207.14.assets/image-20210816150025038.png)
+![image-20210816150025038](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012311574.png)
 
 ```markdown
 # 3.解决错误-1
@@ -406,7 +406,7 @@ monitoring.ui.container.elasticsearch.enabled: true
 }
 ```
 
-![image-20211020205824120](ElasticSearch%207.14.assets/image-20211020205824120.png)
+![image-20211020205824120](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012311831.png)
 
 #### 查询
 
@@ -415,7 +415,7 @@ monitoring.ui.container.elasticsearch.enabled: true
 - GET /_cat/indices?v
 ```
 
-![image-20211020210043010](ElasticSearch%207.14.assets/image-20211020210043010.png)
+![image-20211020210043010](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012311226.png)
 
 #### 删除
 
@@ -425,7 +425,7 @@ monitoring.ui.container.elasticsearch.enabled: true
 - DELETE /*     `*代表通配符,代表所有索引`
 ```
 
-![image-20211020205934645](ElasticSearch%207.14.assets/image-20211020205934645.png)
+![image-20211020205934645](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012311613.png)
 
 ### 映射<mapping>
 
@@ -471,7 +471,7 @@ PUT /products
 }
 ```
 
-![image-20211020211425811](ElasticSearch%207.14.assets/image-20211020211425811.png)
+![image-20211020211425811](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012312094.png)
 
 > 说明: ES中支持字段类型非常丰富，如：text、keyword、integer、long、ip 等。更多参见https://www.elastic.co/guide/en/elasticsearch/reference/7.15/mapping-types.html
 
@@ -482,7 +482,7 @@ PUT /products
 - GET /索引名/_mapping =====> GET /products/_mapping
 ```
 
-![image-20211020211531271](ElasticSearch%207.14.assets/image-20211020211531271.png)
+![image-20211020211531271](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012312897.png)
 
 ### 文档<document>
 
@@ -1183,7 +1183,7 @@ POST /_analyze
 }
 ```
 
-![image-20211024212944413](ElasticSearch%207.14.assets/image-20211024212944413.png)
+![image-20211024212944413](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012313560.png)
 
 ```http
 POST /_analyze
@@ -1193,7 +1193,7 @@ POST /_analyze
 }
 ```
 
-![image-20211024213133835](ElasticSearch%207.14.assets/image-20211024213133835.png)
+![image-20211024213133835](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012313513.png)
 
 #### 扩展词、停用词配置
 
@@ -1236,7 +1236,7 @@ IK支持自定义`扩展词典`和`停用词典`
 
 过滤查询<filter query>，其实准确来说，ES中的查询操作分为2种: `查询(query)`和`过滤(filter)`。查询即是之前提到的`query查询`，它 (查询)默认会计算每个返回文档的得分，然后根据得分排序。而`过滤(filter)`只会筛选出符合的文档，并不计算 得分，而且它可以缓存文档 。所以，单从性能考虑，过滤比查询更快。 换句话说**`过滤适合在大范围筛选数据，而查询则适合精确匹配数据。一般应用时， 应先使用过滤操作过滤数据， 然后使用查询匹配数据。`** 
 
-![image-20211101113527794](ElasticSearch%207.14.assets/image-20211101113527794.png)
+![image-20211101113527794](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012313396.png)
 
 ### 使用
 

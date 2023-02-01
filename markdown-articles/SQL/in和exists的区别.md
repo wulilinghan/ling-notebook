@@ -1,9 +1,8 @@
 ---
 title: in和exists的区别
-url: https://www.yuque.com/tangsanghegedan/ilyegg/vb1ioq
 ---
 
-<https://segmentfault.com/a/1190000008709410> <a name="item-2"></a>
+<https://segmentfault.com/a/1190000008709410> 
 
 ## 什么是exists
 
@@ -15,7 +14,7 @@ exists表示存在，它常常和子查询配合使用，例如下面的SQL语�
 exists用于检查子查询是否至少会返回一行数据，该子查询实际上并不返回任何数据，而是返回值**True**或**False**。
 当子查询返回为真时，则外层查询语句将进行查询。
 当子查询返回为假时，外层查询语句将不进行查询或者查询不出任何记录。
-因此上面的SQL语句旨在搜索出**所有下过单的会员**。需要注意的是，当我们的子查询为 SELECT NULL 时，MYSQL仍然认为它是**True**。 <a name="item-3"></a>
+因此上面的SQL语句旨在搜索出**所有下过单的会员**。需要注意的是，当我们的子查询为 SELECT NULL 时，MYSQL仍然认为它是**True**。 
 
 ## exists和in的区别和使用场景
 

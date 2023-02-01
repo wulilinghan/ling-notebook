@@ -72,7 +72,7 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 
 ### 5.2 镜像 结构
 
-![image-20200404142950068](assets/image-20200404142950068.png)
+![image-20200404142950068](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012304583.png)
 
 `镜像就是花卷`
 
@@ -92,7 +92,7 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 
 
 
-![](assets/1567585172(1).jpg)
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012305459.jpg)
 
 ### 5.4 为什么docker镜像要采用这种分层结构呢?
 
@@ -1055,7 +1055,7 @@ Dockerfile可以认为是**Docker镜像的描述文件，是由一系列命令�
 
 ##### 2.将打包好的jar包上传至服务器中
 
-![image-20200605172340380](assets/image-20200605172340380.png)
+![image-20200605172340380](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012306025.png)
 
 ##### 3.编写Dockerfile文件
 

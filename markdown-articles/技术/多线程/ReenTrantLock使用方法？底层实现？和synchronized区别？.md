@@ -1,10 +1,3 @@
----
-title: ReenTrantLock使用方法？底层实现？和synchronized区别？
-url: https://www.yuque.com/tangsanghegedan/ilyegg/igole2
----
-
-<a name="9d6EW"></a>
-
 # 特点
 
 由于ReentrantLock是java.util.concurrent包下提供的一套互斥锁，相比Synchronized，ReentrantLock类提供了一些高级功能，主要有以下三项：
@@ -13,19 +6,13 @@ url: https://www.yuque.com/tangsanghegedan/ilyegg/igole2
 2. 公平锁，多个线程等待同一个锁时，必须按照申请锁的时间顺序获得锁，Synchronized锁是非公平锁，ReentrantLock**默认的构造函数是创建的非公平锁**，可以通过参数true设为公平锁，但公平锁表现的性能不是很好。
 3. 锁绑定多个条件，一个ReentrantLock对象可以同时绑定对个对象。ReenTrantLock提供了一个Condition（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像synchronized要么随机唤醒一个线程要么唤醒全部线程。
 
-<a name="cUfFA"></a>
-
 # 使用方法：
 
 基于API层面的互斥锁，需要lock()和unlock()方法配合try/finally语句块来完成
 
-<a name="pYaVU"></a>
-
 # 底层实现：
 
 ReenTrantLock的实现是一种自旋锁，通过循环调用CAS操作来实现加锁。它的**性能比较好也是因为避免了使线程进入内核态的阻塞状态。**想尽办法避免线程进入内核的阻塞状态是我们去分析和理解锁设计的关键钥匙。
-
-<a name="Gfvn0"></a>
 
 # 和synchronized区别：
 

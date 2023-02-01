@@ -1,6 +1,5 @@
 ---
 title: INNER JOIN 内连接，OUTER JOIN 外连接
-url: https://www.yuque.com/tangsanghegedan/ilyegg/izvhde
 ---
 
 1. INNER JOIN
@@ -17,19 +16,19 @@ FULL \[OUTER] JOIN 
 **            带where条件id相等的笛卡尔积和inner join结果相同，但是inner join效率快一点**
 **            left join：TEST\_A表的ID为空时拼接TEST\_B表的内容为空，right join则相反**
 **            full join：等于left join和right join的并集**
-**![image.png](..\assets\izvhde\1605154609959-cd0ad5b2-a730-4744-89da-6d37f8a14aeb.png)**
-在使用数据库查询语句时，单表的查询有时候不能满足项目的业务需求，在项目开发过程中，有很多需求都是要涉及到多表的连接查询，总结一下mysql中的多表关联查询 <a name="cvTYo"></a>
+**![image.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012319399.png)**
+在使用数据库查询语句时，单表的查询有时候不能满足项目的业务需求，在项目开发过程中，有很多需求都是要涉及到多表的连接查询，总结一下mysql中的多表关联查询 
 
 # （1）内连接查询
 
 是指所有查询出的结果都是能够在连接的表中有对应记录的。
 以t\_employee(员工表)和t\_dept(部门表)为例：
 t\_employee表中的记录如下：dept代表该员工所在的部门
-![](..\assets\izvhde\1604915577621-b98e3618-5dc5-43de-a38d-2faa8b1c2442.png)
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012320038.png)
 t\_dept表中记录如下：
-![](..\assets\izvhde\1604915577589-261d84de-db11-4765-b1bd-355ea5f36be4.png)
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012320977.png)
 可以发现，其中人力资源部里没有员工（这里只是举例，可能与实际不符，但主要在于逻辑关系），而赵七没有对应的部门，现在想要查询出员工姓名以及其对应的部门名称：
-此时，就要使用内连接查询，关键字（inner join）
+此时，就要使用内连接查询，关键字（inner join)
 在这里说一下关联查询sql编写的思路，1，先确定所连接的表，2，再确定所要查询的字段，3，确定连接条件以及连接方式
 
     1. select
@@ -39,10 +38,8 @@ t\_dept表中记录如下：
     5. ON e.dept = d.id;
 
 查询的结果如下：
-![](..\assets\izvhde\1604915577593-f2e199c8-21a0-41ad-a2c9-78d68e2892d0.png)
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012320679.png)
 其中，没有部门的人员和部门没有员工的部门都没有被查询出来，这就是内连接的特点，只查询在连接的表中能够有对应的记录，其中e.dept = d.id是连接条件
-
-<a name="RuwXH"></a>
 
 # （2）左外连接查询
 
@@ -70,7 +67,7 @@ t\_dept表中记录如下：
 
 这里只是把left修改成了right，但是基准表变化了，是以右表的数据去匹配左表，所以左外连接能做到的查询，右外连接也能做到
 查询结果：
- ![](..\assets\izvhde\1604915577623-d3964bd4-75ee-48ba-af4d-0d37861709b3.png) <a name="TkTur"></a>
+ ![](..\assets\izvhde\1604915577623-d3964bd4-75ee-48ba-af4d-0d37861709b3.png) 
 
 # （4）全外连接
 
@@ -92,8 +89,6 @@ t\_dept表中记录如下：
 ![](..\assets\izvhde\1604915577686-250e6ef2-c90b-4891-a698-763002e972ac.png)
 如果在oracle中，直接就使用full outer join关键字连接两表就行了
 
-<a name="SpIBX"></a>
-
 # （5）自连接查询
 
 自连接查询就是当前表与自身的连接查询，关键点在于虚拟化出一张表给一个别名
@@ -105,7 +100,7 @@ t\_dept表中记录如下：
     4. ON e.bossId = b.id;
 
 查询结果：
- ![](..\assets\izvhde\1604915577620-aa66a413-aaa7-4536-85ef-fa8b0340d530.png)
+ ![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012321161.png)
 在这里，b表是虚拟化出的表，我们可以通过查询了解b表的记录：
 
 ```sql
@@ -116,6 +111,6 @@ t\_dept表中记录如下：
 ```
 
 查询结果：
-![](..\assets\izvhde\1604915577667-0dde17ce-7151-4f50-8f0a-b6378d83dafe.png)
+![](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012321453.png)
 后面的四个字段就是虚拟化出的b表的所有记录，但看这四个字段其实就是记录所有是上司的员工的信息
 所以，自连接查询一般用作表中的某个字段的值是引用另一个字段的值，比如权限表中，父权限也属于权限。

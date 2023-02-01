@@ -3,12 +3,10 @@ title: volatile作用？底层实现？单例模式中volatile的作用？
 url: https://www.yuque.com/tangsanghegedan/ilyegg/mph0zg
 ---
 
-<a name="F9hQp"></a>
-
 # 作用
 
 保证数据的“可见性”：被volatile修饰的变量能够保证每个线程能够获取该变量的最新值，从而避免出现数据脏读的现象。
-禁止指令重排：在多线程操作情况下，指令重排会导致计算结果不一致 <a name="ZvZLG"></a>
+禁止指令重排：在多线程操作情况下，指令重排会导致计算结果不一致 
 
 # 底层实现
 

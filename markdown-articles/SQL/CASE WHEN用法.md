@@ -1,6 +1,5 @@
 ---
 title: CASE WHEN用法
-url: https://www.yuque.com/tangsanghegedan/ilyegg/fe7izr
 ---
 
 Case具有两种格式。简单Case函数和Case搜索函数。

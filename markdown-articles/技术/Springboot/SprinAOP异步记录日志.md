@@ -1,10 +1,3 @@
----
-title: SprinAOP异步记录日志
-url: https://www.yuque.com/tangsanghegedan/ilyegg/tkhr50
----
-
-<a name="a4HlC"></a>
-
 ## 1. 配置文件开启切面
 
 ```java
@@ -12,7 +5,7 @@ url: https://www.yuque.com/tangsanghegedan/ilyegg/tkhr50
 spring.aop.proxy-target-class=true
 ```
 
-<a name="MxCJS"></a>
+
 
 ## 2. 开启异步操作
 
@@ -26,7 +19,7 @@ public class Application {
 }
 ```
 
-<a name="A2BXa"></a>
+
 
 ## 3. 创建线程池
 
@@ -56,7 +49,7 @@ public class ExecutorConfig {
 }
 ```
 
-<a name="N7wtW"></a>
+
 
 ## 4. 在插入方法加上@Async
 
@@ -91,7 +84,7 @@ public class LogApplicationService {
 
 ```
 
-<a name="xu1Gw"></a>
+
 
 ## 5. 自定义日志注解
 
@@ -110,7 +103,7 @@ public @interface SystemControllerLog {
 }
 ```
 
-<a name="QciBg"></a>
+
 
 ## 6. 建立切面
 
@@ -291,7 +284,7 @@ public class SystemLogAspect {
 }
 ```
 
-<a name="6f1df"></a>
+
 
 ## 7. 注解使用
 
@@ -337,7 +330,7 @@ public class UserController {
 }
 ```
 
-<a name="gdAeO"></a>
+
 
 ### 注意事项:
 

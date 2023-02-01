@@ -3,8 +3,6 @@ title: synchronized使用方法？底层实现？
 url: https://www.yuque.com/tangsanghegedan/ilyegg/sh54dx
 ---
 
-<a name="H1xan"></a>
-
 # 使用方法
 
 - **修饰实例⽅法**: 作⽤于当前对象实例加锁，进⼊同步代码前要获得当前对象实例的锁
@@ -12,8 +10,6 @@ url: https://www.yuque.com/tangsanghegedan/ilyegg/sh54dx
 - **修饰代码块**: 指定加锁对象，对给定对象加锁，进⼊同步代码库前要获得给定对象的锁。
 
 总结：synchronized锁住的资源只有两类：一个是对象，一个是类。
-
-<a name="Xfe8H"></a>
 
 # 底层实现
 

@@ -1,9 +1,4 @@
----
-title: 【JAVA】判断对象是否为null,包括对象中的属性为null,可自定义判断的属性或值
-url: https://www.yuque.com/tangsanghegedan/ilyegg/qv8wyq
----
-
-[【JAVA】判断对象是否为null,包括对象中的属性为null,可自定义判断的属性或值](https://blog.csdn.net/qq_35566813/article/details/90914062) <a name="to1fx"></a>
+[【JAVA】判断对象是否为null,包括对象中的属性为null,可自定义判断的属性或值](https://blog.csdn.net/qq_35566813/article/details/90914062) 
 
 ## 前言
 
