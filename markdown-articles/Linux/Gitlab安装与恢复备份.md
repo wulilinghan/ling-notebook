@@ -1,13 +1,8 @@
----
-title: Gitlab安装与恢复备份
-url: https://www.yuque.com/tangsanghegedan/ilyegg/shc4vu
----
+
 
 操作系统: CentOS Linux release 7.6.1810 (Core)
 
 > 查看操作系统版本: cat /etc/redhat-release
-
-<a name="mPrPX"></a>
 
 # 一、安装Gitlab
 
@@ -77,7 +72,7 @@ external_url 'http://gitlab.example.com'
 gitlab-ctl reconfigure 
 ```
 
-<a name="v5jkd"></a>
+
 
 # 二、恢复备份
 
@@ -93,7 +88,7 @@ gitlab-ctl reconfigure
 `sudo gitlab-rake gitlab:backup:restore BACKUP=1500809139_2017_07_23`
 
 从默认备份恢复（backups目录下只有一个备份文件时）：
-`sudo gitlab-rake gitlab:backup:restore` <a name="Y6nVI"></a>
+`sudo gitlab-rake gitlab:backup:restore` 
 
 # 三、启动Gitlab
 

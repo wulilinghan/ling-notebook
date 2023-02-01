@@ -1,15 +1,8 @@
----
-title: Redis持久化
-url: https://www.yuque.com/tangsanghegedan/ilyegg/dxg0pn
----
-
-\[toc] <a name="HdjfE"></a>
-
 # 一、 RDB持久化
 
 - RDB持久化是把当前进程数据生成快照保存到硬盘的过程， 触发RDB持久化过程分为**手动触发**和**自动触发**。
 - 生成的rdb文件的名称以及存储位置由redis.conf中的**dbfilename**和**dir**两个参数控制，默认生成的rdb文件是dump.rdb。
-- Redis默认会采用LZF算法对生成的RDB文件做压缩处理，压缩后的文件远远小于内存大小，默认开启。 <a name="Ucd4N"></a>
+- Redis默认会采用LZF算法对生成的RDB文件做压缩处理，压缩后的文件远远小于内存大小，默认开启。 
 
 ### 手动触发
 
@@ -19,7 +12,7 @@ url: https://www.yuque.com/tangsanghegedan/ilyegg/dxg0pn
 
 > bgsave是针对save阻塞主进程所做的优化，后续所有的自动触发都是使用bgsave进行操作
 
-<a name="u9f0F"></a>
+
 
 ### 自动触发
 
@@ -27,16 +20,18 @@ url: https://www.yuque.com/tangsanghegedan/ilyegg/dxg0pn
   1. redis.conf中配置**save m n**，即在m秒内有n次修改时，自动触发bgsave生成rdb文件。
   2. 主从复制时，从节点要从主节点进行全量复制时也会触发bgsave操作，生成当时的快照发送到从节点。
   3. 执行**debug reload**命令重新加载Redis时， 也会自动触发save操作。
-  4. 默认情况下执行**shutdown**命令时， 如果没有开启AOF持久化功能则自动执行**bgsave**。 <a name="PRmSw"></a>
+  4. 默认情况下执行**shutdown**命令时， 如果没有开启AOF持久化功能则自动执行**bgsave**。 
 
 ### RDB执行流程
 
-                   ![920028540-f3ab8fc1286db26f.png](https://cdn.nlark.com/yuque/0/2021/png/1235436/1618970657168-bab1bfd8-9f83-449f-9a6d-d14c575436ac.png#clientId=u893e7959-2c9b-4&from=ui&id=KgRkf&margin=%5Bobject%20Object%5D&name=920028540-f3ab8fc1286db26f.png&originHeight=512&originWidth=582&originalType=binary&size=69371&status=done&style=none&taskId=ubafd298e-832c-42c2-b71e-3134590db0c)<br />通过上图可以很清楚RDB的执行流程，如下：
+![920028540-f3ab8fc1286db26f.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012109980.png)
+
+通过上图可以很清楚RDB的执行流程，如下：
 
 1. 执行bgsave命令后，会先判断是否存在AOF或者RDB的子进程，如果存在，直接返回。
 2. 父进程fork操作创建一个子进程，fork操作中父进程会被阻塞。
 3. fork完成后，子进程开始根据父进程的内存生成临时快照文件，完成后对原有的RDB文件进行替换。执行lastsave命令可以查看最近一次的RDB时间。
-4. 子进程完成后发送信号给父进程，父进程更新统计信息。 <a name="UIzUB"></a>
+4. 子进程完成后发送信号给父进程，父进程更新统计信息。
 
 ### 开启/关闭rdb持久化
 
@@ -77,27 +72,27 @@ dbfilename dump.rdb
 dir ./
 ```
 
-<a name="KwKW0"></a>
+
 
 ### RDB优缺点
 
-<a name="RUjnL"></a>
+
 
 #### 优点
 
 - RDB文件是某个时间节点的快照，默认使用LZF算法进行压缩，压缩后的文件体积远远小于内存大小，适用于备份、全量复制等场景；
-- Redis加载RDB文件恢复数据要远远快于AOF方式； <a name="kMM65"></a>
+- Redis加载RDB文件恢复数据要远远快于AOF方式； 
 
 #### 缺点
 
 - RDB方式实时性不够，无法做到秒级的持久化；
 - 每次调用bgsave都需要fork子进程，fork子进程属于重量级操作，频繁执行成本较高；
 - RDB文件是二进制的，没有可读性，AOF文件在了解其结构的情况下可以手动修改或者补全；
-- 版本兼容RDB文件问题； <a name="VLK0G"></a>
+- 版本兼容RDB文件问题； 
 
 # 二、 AOF持久化
 
-AOF（append only file） 持久化： 以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中的命令达到恢复数据的目的。 AOF的主要作用是解决了数据持久化的实时性， 目前已经是Redis持久化的主流方式。 <a name="pX9ff"></a>
+AOF（append only file） 持久化： 以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中的命令达到恢复数据的目的。 AOF的主要作用是解决了数据持久化的实时性， 目前已经是Redis持久化的主流方式。
 
 ### 开启/关闭AOF
 
@@ -149,9 +144,7 @@ aof-use-rdb-preamble yes
 > - 配置为no，由于操作系统每次同步AOF文件的周期不可控，而且会加大每次同步硬盘的数据量，虽然提升了性能，但数据安全性无法保证。
 > - 配置为everysec（默认的配置），是**建议的同步策略**， 也是默认配置，做到兼顾性能和数据安全性。理论上只有在系统突然宕机的情况下丢失1秒的数据（当然，这是不太准确的）。
 
-                                                                   ![1485143995-3108788b307e57de.png](https://cdn.nlark.com/yuque/0/2021/png/1235436/1618989986740-ce4199a5-8070-4341-baa2-db255b13f214.png#clientId=u893e7959-2c9b-4&from=ui&id=sl0jg&margin=%5Bobject%20Object%5D&name=1485143995-3108788b307e57de.png&originHeight=482&originWidth=175&originalType=binary&size=32405&status=done&style=none&taskId=u43d6ba72-bb05-4a55-9b62-20757820f57)
-
-<a name="I0lLL"></a>
+![1485143995-3108788b307e57de.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012112157.png)
 
 ### AOF文件重写机制
 
@@ -167,34 +160,34 @@ aof-use-rdb-preamble yes
 > auto-aof-rewrite-min-size: 表示触发aof重写时aof文件的最小体积，默认64mauto-aof-rewrite-percentage： 表示当前aof文件空间和上一次重写后aof文件空间的比值，默认是aof文件体积翻倍时触发重写
 
 auto-aof-rewrite-percentage的计算方法：
-auto-aof-rewrite-percentage =（当前aof文件体积 - 上次重写后aof文件体积）/ 上次重写后aof文件体积 * 100% <a name="KzYKX"></a>
+auto-aof-rewrite-percentage =（当前aof文件体积 - 上次重写后aof文件体积）/ 上次重写后aof文件体积 * 100% 
 
 ### AOP文件重写流程
 
-![2159277-20201218230022086-946569922.png](..\assets\dxg0pn\1618999821403-34609f96-814d-430f-a406-16ac82fd5fc2.png) <a name="xF4sw"></a>
+![2159277-20201218230022086-946569922.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012112003.png) 
 
 ### AOF优缺点
 
-<a name="XY5Ee"></a>
+
 
 #### 优点
 
 - 数据安全性较高，每隔1秒同步一次数据到aof文件，最多丢失1秒数据；
-- aof文件相比rdb文件可读性较高，便于灾难恢复； <a name="G5meU"></a>
+- aof文件相比rdb文件可读性较高，便于灾难恢复；
 
 #### 缺点
 
 - 虽然经过文件重写，但是aof文件的体积仍然比rdb文件体积大了很多，不便于传输且数据恢复速度也较慢
-- aof的恢复速度要比rdb的恢复速度慢 <a name="o6xAw"></a>
+- aof的恢复速度要比rdb的恢复速度慢
 
 # 三、 AOF和RDB的区别
 
 - RDB持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘，实际操作过程是fork一个子进程，先将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储。
-- AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。 <a name="sm7to"></a>
+- AOF持久化以日志的形式记录服务器所处理的每一个写、删除操作，查询操作不会记录，以文本的方式记录，可以打开文件看到详细的操作记录。 
 
 # 四、 如何重启恢复数据？
 
-![2159277-20201218230041019-113334894.png](..\assets\dxg0pn\1618971568063-f7cc5e35-78a4-4e39-9d32-d2b0f749737c.png) <a name="sosQ0"></a>
+![2159277-20201218230041019-113334894.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012113368.png) 
 
 # 五、 持久化性能问题和解决方案
 

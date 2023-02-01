@@ -1,38 +1,25 @@
----
-title: ELK日志平台
-url: https://www.yuque.com/tangsanghegedan/ilyegg/vkbefo
----
-
-<a name="CidQa"></a>
-
 # ELK
 
 [ELK(ElasticSearch, Logstash, Kibana)搭建实时日志分析平台](https://my.oschina.net/itblog/blog/547250)
 [ELK快速入门二-通过logstash收集日志](https://www.cnblogs.com/yanjieli/p/11187573.html)
-\[
 
-]\(https://www.cnblogs.com/yanjieli/p/11187573.html)
 [ELK之日志查询、收集与分析系统](https://www.cnblogs.com/zlslch/p/6621794.html)
 [ELK实时日志分析平台环境部署--完整记录](https://www.cnblogs.com/kevingrace/p/5919021.html)
-\[
 
-]\(https://www.cnblogs.com/kevingrace/p/5919021.html)
-[Filebeat简单配置](https://blog.csdn.net/junxuezheng/article/details/108411022) <a name="NHF3L"></a>
+[Filebeat简单配置](https://blog.csdn.net/junxuezheng/article/details/108411022) 
 
 # Graylog
 
-[比ELK更简洁、高效！企业级日志平台后起之秀Graylog](https://baijiahao.baidu.com/s?id=1693945682253383428\&wfr=spider\&for=pc)
-\[
+[比ELK更简洁、高效！企业级日志平台后起之秀Graylog](https://baijiahao.baidu.com/s?id=1693945682253383428)
 
-]\(https://baijiahao.baidu.com/s?id=1693945682253383428\&wfr=spider\&for=pc)
 
-<a name="QqW4k"></a>
+
 
 # [Elasticsearch与JDK版本对应关系](https://blog.csdn.net/gaogzhen/article/details/105966687)
 
-![ELK流程图.png](..\assets\vkbefo\1620469956685-523bb8cd-c86a-4af4-9c19-986193cfe2b4.png)
+![ELK流程图.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012118410.png)
 
-<a name="FnroV"></a>
+
 
 # 一、Windows安装ELK
 
@@ -41,17 +28,17 @@ ElasticSearch版本：elasticsearch-7.12.1
 Logstash版本：logstash-7.12.1
 Filebeat版本：filebeat-7.12.1
 
-<a name="DS1Mt"></a>
+
 
 ## 1. 安裝elasticsearch
 
 下载地址：<https://www.elastic.co/cn/downloads/elasticsearch>
 
-<a name="OC2cV"></a>
+
 
 ### 1.1 修改配置文件
 
-下载解压。 <a name="Z6TpZ"></a>
+下载解压。
 
 #### elasticsearch-env.bat
 
@@ -84,7 +71,7 @@ set JAVA="%ES_HOME%\jdk\bin\java.exe"
 set JAVA_HOME="%ES_HOME%\jdk" 
 ```
 
-<a name="yZhX1"></a>
+
 
 #### elasticsearch.yml
 
@@ -116,7 +103,7 @@ cluster.initial_master_nodes: ["node-1"]
 ![es.png](..\assets\vkbefo\1620379639218-d1e5e5b8-bfe5-4df8-8d68-9d1a73e86be7.png)
 \----------------------------------------------------------
 
-访问：<http://localhost:9200/> <a name="KD9Nz"></a>
+访问：<http://localhost:9200/> 
 
 ### 1.2. 安装elasticsearch-head-master插件
 
@@ -142,7 +129,7 @@ http.cors.allow-origin: "*"
 
 ## 2. 安装Kibana
 
-<a name="iTPHU"></a>
+
 
 ### 2.1 修改配置文件
 
@@ -155,19 +142,19 @@ elasticsearch.hosts: ["http://localhost:9200"]
 i18n.locale: "zh-CN"
 ```
 
-<a name="mvAFs"></a>
+
 
 ### 2.2 启动Kibana
 
 bin/kibana.bat
 
 访问地址
-<http://localhost:5601/> <a name="lp0eD"></a>
+<http://localhost:5601/> 
 
 ## 3. 安装logstash
 
 下载：<https://www.elastic.co/cn/downloads/logstash>
-下载后解压。 <a name="CTpM5"></a>
+下载后解压。
 
 ### 3.1 创建Logstash配置文件
 
@@ -234,7 +221,7 @@ output {
 }
 ```
 
-<a name="T6FLm"></a>
+
 
 ### 3.2 启动Logstash
 
@@ -244,37 +231,37 @@ output {
 logstash -f D:\dev-env\elk\logstash-7.12.1\config\conf.d\log_to_es.conf
 ```
 
-<a name="PXsii"></a>
+
 
 ## 安装Filebeat
 
-解压。 <a name="Jj1FF"></a>
+解压。
 
 #### 1. 更改配置文件
 
-<a name="w8il0"></a>
+
 
 # 二、Linux安装ELK
 
-<a name="F8Oo6"></a>
+
 
 ## ELK版本
 
 环境JDK版本：jdk1.8
 ElasticSearch版本：elasticsearch-7.12.1
 Logstash版本：logstash-7.12.1
-Kibana版本：logstash-7.12.1 <a name="TP5cP"></a>
+Kibana版本：logstash-7.12.1
 
 ## 1. [安装ElasticSearch](https://www.cnblogs.com/blogjun/articles/82fb37eb418a2ed8dc6adf3d306aa2ef.html)
 
-<a name="sfPt1"></a>
+
 
 ### 1.1 上传文件
 
 使用压缩文件进行安装使用。
 mkdir elk&#x20;
 将文件丢到新建的文件夹中
-![image.png](..\assets\vkbefo\1620441557148-7bbfd71d-b7f2-4fa6-8b0f-67c85b50d646.png) <a name="jxnVO"></a>
+![image.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012124399.png) 
 
 ### 1.2 创建新用户
 
@@ -291,7 +278,7 @@ useradd elkuser
 chown -R elkuser.elkuser elasticsearch-7.12.1
 ```
 
-<a name="hl3gD"></a>
+
 
 ### 1.3 修改配置文件
 
@@ -367,7 +354,7 @@ su elkuser
 -Xmx2g
 ```
 
-<a name="ZwFzf"></a>
+
 
 ### 1.4 启动elasticsearch(运行端口：9200)
 
@@ -431,23 +418,23 @@ su elkuser
 
 修改完再重新启动
 `./elasticsearch -d`
-![image.png](..\assets\vkbefo\1620441442996-887be2f1-02c6-461b-a5eb-6c75ff10af04.png)
+![image.png](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2023/202302012124642.png)
 
 附带上修改好的配置文件
 [elasticsearch.yml](https://www.yuque.com/attachments/yuque/0/2021/yml/1235436/1620467469334-043d870b-9548-4ee7-a53b-b148502b38f7.yml?_lake_card=%7B%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2021%2Fyml%2F1235436%2F1620467469334-043d870b-9548-4ee7-a53b-b148502b38f7.yml%22%2C%22name%22%3A%22elasticsearch.yml%22%2C%22size%22%3A2828%2C%22type%22%3A%22%22%2C%22ext%22%3A%22yml%22%2C%22status%22%3A%22done%22%2C%22taskId%22%3A%22u9b05d70f-c04b-4bf1-8da9-865bf114d55%22%2C%22taskType%22%3A%22upload%22%2C%22id%22%3A%22ud5a19124%22%2C%22card%22%3A%22file%22%7D)
 
-<a name="Sz65D"></a>
+
 
 ## 2. 安装Logstash
 
 > grok提供多个常用正则表达式可供使用，这些正则表达式定义在
 > /usr/local/elk/logstash-7.12.1/vendor/bundle/jruby/2.5.0/gems/logstash-patterns-core-4.3.1/patterns/legacy/grok-patterns文件中
 
-<a name="gbmer"></a>
+
 
 ### 2.1 修改配置文件
 
-<a name="W1os5"></a>
+
 
 #### 2.1.1 [修改tomcat.out日志文件格式](https://blog.csdn.net/recotone/article/details/81032769?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-10.vipsorttest\&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-10.vipsorttest)
 
@@ -487,7 +474,7 @@ java.util.logging.SimpleFormatter.format = %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%
 #################### 自定义时间格式 #####################
 ```
 
-![image.png](..\assets\vkbefo\1620613485613-2769cedd-46cb-409c-813b-6f7eede922ff.png) <a name="ymVoI"></a>
+![image.png](..\assets\vkbefo\1620613485613-2769cedd-46cb-409c-813b-6f7eede922ff.png) 
 
 #### 2.1.2 修改logstash配置文件
 
@@ -610,7 +597,7 @@ output {
 
 ```
 
-<a name="wn4Ax"></a>
+
 
 ### 2.2 启动Logstash(运行端口：5044)
 
@@ -621,7 +608,7 @@ output {
 - 后台启动 打印日志
 - nohup ./logstash -f /usr/local/elk/logstash-7.12.1/config/conf.d/log\_to\_es.conf &>logstash.log &
 
-<a name="xiNGX"></a>
+
 
 #### 常用启动参数
 
@@ -633,11 +620,11 @@ output {
 - \-l #指定日志文件名称，例如：./logstash -f config/test.conf -l logs/test.log
 - \-w #指定filter线程数量，不指定默认是5，例如：./logstash-f config/test.conf -w 8
 
-<a name="nhjt5"></a>
+
 
 ## 3. 安装Kibana
 
-<a name="urth4"></a>
+
 
 ### 3.1 修改配置文件
 
@@ -652,7 +639,7 @@ kibana.index: ".kibana"
 i18n.locale: "zh-CN"
 ```
 
-<a name="bjMqc"></a>
+
 
 ### 3.2 启动Kibana(运行端口：5601)
 
@@ -678,11 +665,11 @@ nohup ./kibana &>kibana.log &
 访问Kibana地址
 <http://10.10.66.154:5601/>
 
-<a name="yAgkG"></a>
+
 
 ## 4. 安装Filebeat
 
-<a name="rvw8Y"></a>
+
 
 ### 4.1 修改配置
 
@@ -751,7 +738,7 @@ output {
 }
 ```
 
-<a name="u3vzW"></a>
+
 
 ### 4.2 启动filebeat
 
@@ -763,7 +750,7 @@ nohup ./filebeat -e -c /usr/local/elk/filebeat-7.12.1-linux-x86\_64/filebeat.yml
 
 > Failed to connect to backoff(elasticsearch(http://10.10.66.154:5044)): Get "http://10.10.66.154:5044": read tcp 10.10.66.154:60270->10.10.66.154:5044: read: connection reset by peer
 
-filebeat -》 logstash 连接失败 <a name="MRIno"></a>
+filebeat -》 logstash 连接失败
 
 ## 5. 关闭服务
 
