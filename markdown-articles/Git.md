@@ -41,12 +41,14 @@ git remote -v
 
 ```
 git remote set-url origin git@github.com:wulilinghan/assets.git
+
+git branch --set-upstream-to=origin/main
 ```
 
 改完之后可以连接本地仓库和远程仓库，同步一下，这里注意下，github之前默认`master`是主分支名称，后面是`main`了，要看下自己这个仓库对应分支名称
 
 ```
-git branch --set-upstream-to=origin/main
+
 
 git remote -v
 ```

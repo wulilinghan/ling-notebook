@@ -1198,3 +1198,68 @@ password: n8hLPrBJ
 
 ```
 
+# pinry （瀑布流图片分享无网站）
+
+> Dockerhub: https://hub.docker.com/r/getpinry/pinry
+>
+> Github: https://github.com/pinry/pinry
+>
+> doc: https://docs.getpinry.com/install-with-docker/
+
+```
+docker run -d --restart=always --name=pinry \
+	-p 8010:80 \
+    -v /docker_volume/pinry:/data \
+  getpinry/pinry:2.1.12
+```
+
+![image-20230210225830664](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/202302102258748.png)
+
+# minio（文件服务器）
+
+> 中文网：http://www.minio.org.cn/
+>
+> Github： https://github.com/minio/minio
+
+​		MinIO 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。
+
+MinIO是一个非常轻量的服务,可以很简单的和其他应用的结合，类似 NodeJS, Redis 或者 MySQL。
+
+```
+docker run -d --restart=always --name minio \
+-p 9002:9000 \
+-p 9001:9001 \
+-e "MINIO_ACCESS_KEY=admin" \
+-e "MINIO_SECRET_KEY=admin123456" \
+-v /docker_volume/minio/data:/data \
+-v /docker_volume/minio/config:/root/.minio \
+quay.io/minio/minio \
+server /data --console-address ":9001"
+```
+
+> 9000端口被我portainer占了，这里换成9002
+>
+> server /data  是启动命令
+>
+> --console-address ":9001" 是控制台访问端口
+
+
+
+## 添加 readonly 访问规则
+
+> 添加规则文件才能访问
+
+![image-20230211003040066](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/202302110030159.png)
+
+## 文件访问
+
+访问地址是` http://ip地址:9002/{bucket}/{file_name}`
+
+> 9002 映射是容器的9000端口
+>
+> 9001 是控制台端口
+
+```
+http://192.168.3.50:9002/demo/photo_2022-09-04_04-28-27.jpg
+```
+

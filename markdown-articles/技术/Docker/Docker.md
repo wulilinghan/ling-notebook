@@ -393,7 +393,7 @@ vim /usr/lib/systemd/system/docker.service
 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 
 #新增 -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
-# 建议换2375端口，提示安全性
+# 建议换2375端口，提高安全性
 [Service]
 ExecStart=/usr/bin/dockerd -H  fd:// --containerd=/run/containerd/containerd.sock -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
 
