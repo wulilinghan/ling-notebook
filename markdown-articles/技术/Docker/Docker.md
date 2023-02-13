@@ -418,19 +418,21 @@ find / -name docker.sock 查找一下正确位置就好了
 ### 8.1 安装MySQL
 
 ```markdown
-# 1.在docker hub搜索mysql镜像
-	docker search mysql
+# 运行mysql服务
+
+#MySQL5.7
+docker run -d --name mysql57 --restart=always \
+-p 3307:3306 \
+-v /docker_volume/mysql57/data:/var/lib/mysql \
+-v /docker_volume/mysql57/conf.d:/etc/mysql/conf.d \
+-e MYSQL_ROOT_PASSWORD=root mysql:5.7.40
 	
-# 2.拉取mysql镜像到本地
-	docker pull mysql:<tag> (tag不加默认最新版本)
-	docker pull mysql （没指定版本,安装的最新的）	
-
-# 创建数据目录
-mkdir -p /opt/docker/mysql/data
-
-# 3.运行mysql服务
-	docker run -d --name mysql --restart=always -v /opt/docker/mysql/data:/var/lib/mysql -v /opt/docker/mysql/conf.d:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=root@123 -p 3306:3306  mysql:5.7.40
-
+# MySQL最新版本
+docker run -d --name mysql --restart=always \
+-p 3306:3306 \
+-v /docker_volume/mysql/data:/var/lib/mysql \
+-v /docker_volume/mysql/conf.d:/etc/mysql/conf.d \
+-e MYSQL_ROOT_PASSWORD=root  mysql
 ```
 > 命令说明：
 - **--name mysql**：指定容器名称
@@ -443,36 +445,56 @@ mkdir -p /opt/docker/mysql/data
 
 
 
-```markdown
-# 4.进入mysql容器
-	docker exec -it <容器名称|容器id> bash
-	docker exec -it mysql /bin/bash
-	
-# 5.外部查看mysql日志
-	docker logs -t -f <容器名称|容器id>
-	docker logs -t -f mysql
-	
-# 6.登录mysql，创建数据库
-    mysql -u root -p
-    create database test_db character set utf8mb4 collate utf8mb4_bin;
-
-    use mysql;  切换数据库
-
-    CREATE USER 'blog'@'%' IDENTIFIED BY 'blog@123'; 创建用户设置密码
-    修改加密方式，不然可能有些客户端不支持会报错
-    ALTER USER 'blog'@'%' IDENTIFIED WITH mysql_native_password BY 'blog@123';
-    
-    grant all on *.* to 'blog'@'%'; 授权
-
-# 7.将mysql数据库备份为sql文件
-	docker exec mysql|容器id sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > /root/all-databases.sql  --导出全部数据
-	docker exec mysql sh -c 'exec mysqldump --databases 库表 -uroot -p"$MYSQL_ROOT_PASSWORD"' > /root/all-databases.sql  --导出指定库数据
-	docker exec mysql sh -c 'exec mysqldump --no-data --databases 库表 -uroot -p"$MYSQL_ROOT_PASSWORD"' > /root/all-databases.sql  --导出指定库数据不要数据
-
-# 8.执行sql文件到mysql中
-	docker exec -i mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < /root/xxx.sql
+4.进入mysql容器
 ```
+docker exec -it <容器名称|容器id> bash
+docker exec -it mysql57 /bin/bash
+docker exec -it mysql /bin/bash
+```
+5.外部查看mysql日志
+```
+docker logs -t -f <容器名称|容器id>
+docker logs -t -f mysql
+```
+6.登录mysql，创建数据库
+
+```
+mysql -u root -p
+create database test_db character set utf8mb4 collate utf8mb4_bin;
+
+use mysql;  切换数据库
+
+CREATE USER 'blog'@'%' IDENTIFIED BY 'blog@123'; 创建用户设置密码
+修改加密方式，不然可能有些客户端不支持会报错
+ALTER USER 'blog'@'%' IDENTIFIED WITH mysql_native_password BY 'blog@123';
+
+grant all on *.* to 'blog'@'%'; 授权
+```
+7.将mysql数据库备份为sql文件
+```
+docker exec mysql|容器id sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > /root/all-databases.sql  --导出全部数据
+
+docker exec mysql sh -c 'exec mysqldump --databases 库表 -uroot -p"$MYSQL_ROOT_PASSWORD"' > /root/all-databases.sql  --导出指定库数据
+
+docker exec mysql sh -c 'exec mysqldump --no-data --databases 库表 -uroot -p"$MYSQL_ROOT_PASSWORD"' > /root/all-databases.sql  --导出指定库数据不要数据
+```
+8.执行sql文件到mysql中
+```
+docker exec -i mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < /root/xxx.sql
+```
+
+
+
+查看MySQL版本
+
+```
+select version();
+```
+
+
+
 ### 8.2 安装Oracle11g
+
 ```markdown
 # 运行
 docker run -d -p 1521:1521 --name oracle11g registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g

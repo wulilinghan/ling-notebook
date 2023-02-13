@@ -828,7 +828,7 @@ systemctl restart netdata
 
 
 
-# ~~Ward（单服务器监控工具）~~
+# Ward（单服务器监控工具）
 
 > 官方项目地址：https://github.com/B-Software/Ward
 >
@@ -892,8 +892,7 @@ nicolargo/glances:3.3.0.4-full
 ```
 
 
-
-# Flare (网址导航)
+# ~~Flare (网址导航)~~
 
 > https://github.com/soulteary/docker-flare
 >
@@ -923,11 +922,98 @@ docker run -d --name flare \
 -e FLARE_PASS=flare123 \
 -v /opt/docker/flare:/app soulteary/flare:0.4.0
 
-
 # 更改链接的图标，图标访问此地址
 http://{servcer_ip}:5005/icons/
+```
+
+
+
+# homepage （网址导航）
+
+> Github: https://github.com/benphelps/homepage
+>
+> 图标: https://github.com/walkxcode/Dashboard-Icons
+>
+> A highly customizable homepage (or startpage / application dashboard) with Docker and service API integrations.
 
 ```
+docker run -d --restart=always --name homepage \
+-p 3000:3000 \
+-v /docker_volume/homepage/config:/app/config \
+-v /var/run/docker.sock:/var/run/docker.sock \
+ghcr.io/benphelps/homepage:latest
+```
+
+![image-20230212211815199](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230212211822312.png)
+
+# webstack-laravel（网址导航）
+
+> Github: https://github.com/gz-hejiehui/WebStack-Laravel
+>
+> Dockerhub: https://hub.docker.com/r/arvon2014/webstack-laravel/tags
+
+需要先手动创建一个数据库，库名 webstack
+
+```
+docker run -d --restart=always --name webstack-laravel \
+-p 9010:8000 \
+-e DB_HOST=192.168.3.50 \
+-e DB_PORT=3307 \
+-e DB_DATABASE=webstack \
+-e DB_USERNAME=root \
+-e DB_PASSWORD=root \
+arvon2014/webstack-laravel:v1.2.2 \
+/entrypoint.sh server
+```
+
+访问：http://192.168.3.50:9010/
+
+后台地址：http://192.168.3.50:9010/admin
+
+默认用户：admin
+
+默认密码：admin
+
+# WordPress（博客平台）
+
+> 官网：https://wordpress.com/zh-cn/
+
+1.安装前先手动创建个 `wordpress` 库，启动他这不会自动创建
+
+```
+docker run -d --restart=always --name wordpress \
+-p 1080:80 \
+-e TZ="Asia/Shanghai" \
+-e WORDPRESS_DB_HOST=192.168.3.50:3306 \
+-e WORDPRESS_DB_USER=root \
+-e WORDPRESS_DB_PASSWORD=root \
+-e WORDPRESS_DB_NAME=wordpress \
+-v /docker_volume/wordpress/html:/var/www/html \
+-v /docker_volume/wordpress/config/:/config \
+wordpress
+```
+
+
+## 主题 - Webstack 
+
+> 项目主页：https://github.com/owen0o0/WebStack
+>
+> 官方Demo：http://webstack.iotheme.cn/
+
+这是个类似网址导航的主题。
+
+1.下载主题包：https://github.com/owen0o0/WebStack/archive/refs/tags/1.1620.zip
+
+2.解压将文件夹上传到 /docker_volume/wordpress/html/wp-content/themes/ 目录下
+
+3.启动 Webstack 主题，然后在主题设置页面自定义个性化的配置
+
+![image-20230212215148592](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230212215148679.png)
+
+
+新建网址分类，然后添加网址（然后勾选右侧网址目录）
+
+
 
 # Sonic (博客平台)
 
@@ -955,6 +1041,8 @@ docker run --name sonic-server \
 -v /opt/docker/sonic:/sonic -d gosonic/sonic
 
 ```
+
+
 
 # Halo（博客平台）
 
@@ -1029,6 +1117,8 @@ docker run -d \
 
 - [plugin-comment-widget](https://github.com/halo-sigs/plugin-comment-widget) - Halo 2.0 的前台评论组件插件
 
+
+
 # go-md-book（markdown博客）
 
 > Github地址：https://github.com/hedongshu/go-md-book
@@ -1081,6 +1171,8 @@ vling/markdown-blog:latest \
 docker run --rm -it -e CERT_DNS=lab.com,*.lab.com,*.data.lab.com -v /opt/docker/ssl:/ssl soulteary/certs-maker 
 ```
 
+
+
 # JetBrains License Server
 
 ```
@@ -1093,6 +1185,8 @@ docker run -d -p 8087:8000 --name jetbrains_license_server \
   crazymax/jetbrains-license-server
   
 ```
+
+
 
 # Ant-Media-Server（直播推流）
 
@@ -1171,6 +1265,8 @@ docker run -d --name pure-live -p 8800:8800 -v /opt/docker/pure-live/data:/data 
 docker run -it -p 1935:1935 -p 8080:8080 -p 4433:4433 -p 5544:5544 -p 8083:8083 -p 8084:8084 -p 30000-30100:30000-30100/udp q191201771/lal /lal/bin/lalserver -c /lal/conf/lalserver.conf.json
 ```
 
+
+
 # AList
 
 > 文档：https://alist.nn.ci/zh/
@@ -1198,7 +1294,7 @@ password: n8hLPrBJ
 
 ```
 
-# pinry （瀑布流图片分享无网站）
+# pinry （瀑布流图片分享网站）
 
 > Dockerhub: https://hub.docker.com/r/getpinry/pinry
 >
@@ -1215,13 +1311,17 @@ docker run -d --restart=always --name=pinry \
 
 ![image-20230210225830664](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/202302102258748.png)
 
+
+
 # minio（文件服务器）
 
 > 中文网：http://www.minio.org.cn/
 >
 > Github： https://github.com/minio/minio
+>
+> Dockerhub: https://hub.docker.com/r/minio/minio/tags
 
-​		MinIO 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。
+MinIO 是一个基于Apache License v2.0开源协议的对象存储服务。它兼容亚马逊S3云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几kb到最大5T不等。
 
 MinIO是一个非常轻量的服务,可以很简单的和其他应用的结合，类似 NodeJS, Redis 或者 MySQL。
 
@@ -1233,7 +1333,7 @@ docker run -d --restart=always --name minio \
 -e "MINIO_SECRET_KEY=admin123456" \
 -v /docker_volume/minio/data:/data \
 -v /docker_volume/minio/config:/root/.minio \
-quay.io/minio/minio \
+quay.io/minio/minio:RELEASE.2023-02-10T18-48-39Z \
 server /data --console-address ":9001"
 ```
 
@@ -1246,8 +1346,6 @@ server /data --console-address ":9001"
 
 
 ## 添加 readonly 访问规则
-
-> 添加规则文件才能访问
 
 ![image-20230211003040066](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/202302110030159.png)
 
@@ -1263,3 +1361,18 @@ server /data --console-address ":9001"
 http://192.168.3.50:9002/demo/photo_2022-09-04_04-28-27.jpg
 ```
 
+
+
+# piwigo（相册系统）
+
+```
+docker run -d --restart=always --name piwigo \
+-p 8009:80 \
+-e TZ=Asia/Taipei \
+-v /docker_volume/piwigo/config:/config \
+-v /docker_volume/gallery:/gallery \
+--link mysql \
+linuxserver/piwigo:13.5.0
+```
+
+![image-20230211213727054](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230211213727139.png)
