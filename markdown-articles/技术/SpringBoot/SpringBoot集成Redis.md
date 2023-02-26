@@ -1,14 +1,13 @@
 ## 1.1 Redis相关介绍
 
 Redis 是一种非关系型数据库（NoSQL），NoSQL 是以 key-value 的形式存储的。
+
 Redis 的 key 可以是字符串、哈希、链表、集合和有序集合。value 类型很多，包括 String、list、set、
 zset。这些数据类型都支持 push/pop、add/remove、取交集和并集以及更多更丰富的操作，Redis 也
 支持各种不同方式的排序。为了保证效率，数据都是在缓存在内存中，它也可以周期性的把更新的数据
 写入磁盘或者把修改操作写入追加的记录文件中。 
 
 ## 1.2 Springboot集成Redis
-
-
 
 ### 1.2.1 依赖导入
 

@@ -12,6 +12,86 @@ ssh-keygen -o
 
 用户目录下`.ssh`目录中的 `id_rsa.pub` 文件内容就是公钥内容，把它放入github或者gitlab中
 
+# Maven
+
+maven config：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <localRepository>D:\work-space\repo\repository_boot</localRepository>
+
+  <pluginGroups></pluginGroups>
+  <proxies></proxies>
+  <servers></servers>
+  <mirrors></mirrors>
+
+  <profiles>
+	<profile>  
+		<id>aliyun</id>
+		<repositories>
+			<!-- repo1 -->
+			<repository>
+				<id>aliyunmaven</id>
+				<name>aliyunmaven</name>
+				<url>https://maven.aliyun.com/repository/public</url>
+			</repository>
+			<!-- repo2 -->
+			<repository>
+				<id>aliyunmavenApache</id>
+				<url>https://maven.aliyun.com/repository/apache-snapshots</url>
+			</repository>
+			<!-- repo3 -->
+			<repository>
+				<id>spring</id>
+				<url>https://maven.aliyun.com/repository/spring</url>
+				<releases>
+					<enabled>true</enabled>
+				</releases>
+				<snapshots>
+					<enabled>true</enabled>
+				</snapshots>
+			</repository>
+		</repositories>  
+	</profile>
+	<profile>  
+		<id>camunda.com</id>
+		<repositories>
+			<repository> 
+			  <id>activiti-repos2</id> 
+			  <name>Activiti Repository 2</name> 
+			  <url>https://app.camunda.com/nexus/content/groups/public</url> 
+			</repository> 
+		</repositories>  
+	</profile>
+	<profile>  
+		<id>MavenCentral</id>
+		<repositories>
+			<!-- repo1 -->
+			<repository> 
+			  <id>central-repos</id> 
+			  <name>Central Repository</name> 
+			  <url>http://repo.maven.apache.org/maven2</url> 
+			</repository>
+			<!-- repo2 -->
+			<repository> 
+				<id>central-repos1</id> 
+				<name>Central Repository 2</name> 
+				<url>http://repo1.maven.org/maven2/</url> 
+			</repository>
+		</repositories>  
+	</profile>
+	</profiles>
+</settings>
+```
+
+
+
+
+
 # MySQL
 
 ## 卸载服务

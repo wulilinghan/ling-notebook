@@ -47,23 +47,34 @@ docker run --name unblock-netease-music --restart always -p 18080:8080 -e ENABLE
 
 
 ```markdown
-#
-mkdir -p /opt/docker/adguardhome/{work,conf}
-
-#
-docker run -d --name adguardhome \
---restart unless-stopped \
--v /opt/docker/adguardhome/work:/opt/adguardhome/work \
--v /opt/docker/adguardhome/conf:/opt/adguardhome/conf \
--p 53:53/tcp -p 53:53/udp\
--p 67:67/udp -p 68:68/udp\
--p 80:80/tcp -p 443:443/tcp -p 443:443/udp -p 3000:3000/tcp\
--p 853:853/tcp\
--p 784:784/udp -p 853:853/udp -p 8853:8853/udp\
--p 5443:5443/tcp -p 5443:5443/udp\
+docker run -d --name adguardhome --restart=always \
+-v /docker_volume/adguardhome/work:/opt/adguardhome/work \
+-v /docker_volume/adguardhome/conf:/opt/adguardhome/conf \
+-p 53:53/tcp -p 53:53/udp \
+-p 80:80/tcp -p 443:443/tcp -p 443:443/udp -p 3000:3000/tcp \
+-p 5443:5443/tcp -p 5443:5443/udp \
 adguard/adguardhome
-```
 
+
+docker start adguardhome
+docker stop adguardhome
+docker rm adguardhome
+```
+> `-p 53:53/tcp -p 53:53/udp`	纯DNS。
+> 
+> `-p 67:67/udp -p 68:68/tcp -p 68:68/udp`	 如果您打算使用 [AdGuard Home](https://github.com/AdguardTeam/AdGuardHome/wiki/Encryption) 作为 DHCP 服务器，请添加。
+> 
+> `-p 80:80/tcp -p 443:443/tcp -p 443:443/udp -p 3000:3000/tcp`	如果您要使用 AdGuard Home 的管理面板以及将 AdGuard Home 作为 [HTTPS/DNS-over-HTTPS](HTTPS/DNS-over-HTTPS) 服务器运行，请添加。
+> 
+> `-p 853:853/tcp`	如果您要将 AdGuard Home 作为DNS-over-TLS服务器运行，请添加。
+> 
+> `-p 784:784/udp -p 853:853/udp -p 8853:8853/udp`	如果您要将 AdGuard Home 作为 [DNS-over-QUIC](https://github.com/AdguardTeam/AdGuardHome/wiki/Encryption) 服务器运行，请添加。你可以只留下其中的一两个。
+> 
+> `-p 5443:5443/tcp -p 5443:5443/udp`	如果您要将 AdGuard Home 作为 [DNSCrypt](https://github.com/AdguardTeam/AdGuardHome/wiki/Encryption) 服务器运行，请添加。
+
+
+
+配置
 
 ```
 上游 DNS 服务器：
@@ -938,7 +949,7 @@ http://{servcer_ip}:5005/icons/
 
 ```
 docker run -d --restart=always --name homepage \
--p 3000:3000 \
+-p 3001:3000 \
 -v /docker_volume/homepage/config:/app/config \
 -v /var/run/docker.sock:/var/run/docker.sock \
 ghcr.io/benphelps/homepage:latest
@@ -1346,6 +1357,8 @@ server /data --console-address ":9001"
 
 
 ## 添加 readonly 访问规则
+
+> 不添加此规则，则文件无法直接访问
 
 ![image-20230211003040066](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/202302110030159.png)
 
