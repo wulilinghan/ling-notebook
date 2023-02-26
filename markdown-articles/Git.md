@@ -9,6 +9,25 @@ git config --global user.name "xxxx"
 # 假如是github，这里的邮件地址跟github的邮箱地址一致，才会有小绿格
 git config --global user.email xxxx@example.com
 ```
+
+## .gitattributes
+项目语言统计
+
+| .gitattributes属性分类   | 分类         | 简单说明     | 举例    |
+| ------------------------ | ------------ | ---------------| ----------|
+| linguist-language     | 语言转化     | 将一种语言识别为另一种语言                                   | `*.rb linguist-language=Java`        | 
+| linguist-vendored     | 供应(商)代码 | 标记供应商文件，把使用的库文件标记为供应商代码（即不是自己编写的），如jQuery库文件 | jquery.js linguist-vendored | 
+| linguist-generated     | 生成的代码   | 标记一些生成的文件，如压缩的js默认被忽略          | Api.elm linguist-generated=true    | 
+| linguist-documentation | 文档       | 标记一些文档     | `project-docs/* linguist-documentation` | 
+| linguist-detectable   | 可检测的     | 标记某文件是否检测为语言，默认（各种常见语言）都可检测，为false时，不进行语言检测 | export_bom.py linguist-detectable=false |
+
+> 注意：
+> 
+> 1. 等号前后是不能有空格的！如果文件`.gitattributes`文件有错误，git add 或者git commit 时会给出提示，github上面也会有相应提示。
+> 2. 对于 `jquery.js linguist-vendored=true`这种属性值为布尔值的，好像只有使用 `jquery.js linguist-vendored`这种形式才有用。
+
+
+
 # 生成 SSH 公钥
 
 https://git-scm.com/book/zh/v2/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E7%94%9F%E6%88%90-SSH-%E5%85%AC%E9%92%A5
