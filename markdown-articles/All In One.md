@@ -110,10 +110,12 @@ vmkfstools -r /vmfs/devices/disks/[硬盘ID] [SSD路径]/[硬盘名].vmdk
 
 # ESXI备份虚拟机
 
-先安装 VMware-ovftool ，备份命令：
+先安装 [VMware-ovftool](https://pan.quark.cn/s/ca73fd74d5e8) ，进入安装目录下执行此备份命令：
+
+192.168.3.2 是esxi ip地址，openwrt是虚拟机的名字，后面是指定备份文件路径
 
 ```
-# 192.168.3.2 是esxi ip地址，openwrt是虚拟机的名字，后面是指定备份文件路径
+
 ovftool vi://root:@192.168.3.2/openwrt D:\我的服务器备份\esxi\openwrt.ova
 
 ovftool vi://root:@192.168.3.2/OpenMediaVault D:\我的服务器备份\esxi\OpenMediaVault.ova
@@ -166,7 +168,7 @@ administrator tlh@123
 # OpenMediaVault
 
 [官网]: https://www.openmediavault.org/
-[ESXI安装]: 
+[ESXI安装OpenMediaVault]: https://blog.51cto.com/bruceou/4853118
 
 
 
