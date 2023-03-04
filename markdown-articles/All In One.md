@@ -110,16 +110,20 @@ vmkfstools -r /vmfs/devices/disks/[硬盘ID] [SSD路径]/[硬盘名].vmdk
 
 # ESXI备份虚拟机
 
+**需要在虚拟机关机状态下进行备份**
+
 先安装 [VMware-ovftool](https://pan.quark.cn/s/ca73fd74d5e8) ，进入安装目录下执行此备份命令：
 
 192.168.3.2 是esxi ip地址，openwrt是虚拟机的名字，后面是指定备份文件路径
 
 ```
 
-ovftool vi://root:@192.168.3.2/openwrt D:\我的服务器备份\esxi\openwrt.ova
+ovftool vi://root:@192.168.3.2/openwrt D:\Backups\esxi\openwrt.ova
 
-ovftool vi://root:@192.168.3.2/OpenMediaVault D:\我的服务器备份\esxi\OpenMediaVault.ova
+ovftool vi://root:@192.168.3.2/OpenMediaVault D:\Backups\esxi\OpenMediaVault.ova
 ```
+
+![image-20230305032757778](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230305032757849.png)
 
 恢复虚拟机，在 esxi 新建虚拟机的时候选择 **`从OVF或OVA文件部署虚拟机`**
 
@@ -172,6 +176,12 @@ administrator tlh@123
 
 
 
+重装omv每次重新配置硬盘都要给硬盘新建文件系统（会进行格式化）？还是所有的nas系统都这样？
+
+
+
+我这里安装的是6.0.24版本
+
 ## 账号密码
 
 ssh账号密码：root tlh@123
@@ -190,19 +200,171 @@ web登录默认账号密码：admin openmediavault
 
 ## 配置共享服务
 
-### **开启FTP服务**
+### 开启FTP服务
 
 ![image-20230304214543509](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230304214543563.png)
 
 
 
-### **开启SMB/CIFS**
+### 开启SMB/CIFS
 
 ![image-20230304214642352](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230304214642416.png)
 
 
 
 ## 安装Docker
+
+> [how-to-install-docker-on-openmediavault](https://www.wundertech.net/how-to-install-docker-on-openmediavault/)
+
+先要安装 OMV-Extras ，ssh登录openmediavault，发现我这omv连外网都没法访问
+
+先配置下dns
+
+```
+vi /etc/resolv.conf
+```
+
+发现无法编辑，找到源文件，点击 resolv.conf 跳转到了 `/run/systemd/resolve/ `目录下，编辑 resolv.conf
+文件尾部加上了以下内容
+
+```
+nameserver 114.114.114.114
+```
+
+发现这个dns的配置会自动重置，不知道咋回事，只能遇到dns问题是再修改一次了，后面安装portainer时就遇到报错，提示 dns异常，返回这里一看发现重置成默认的了，这里只能再改一次dns了
+
+
+
+页面也可以配置dns，网络》接口 编辑网卡底部高级设置，设置dns服务器，我这里设置的114.114.114.114
+
+
+
+### **修改 Open Media Vault 镜像源**
+
+》https://mirrors.tuna.tsinghua.edu.cn/help/openmediavault/
+
+》https://tvtv.fun/pc-to-nas/16th.html
+
+**sources.list**
+
+```mar
+# 备份配置文件
+cp /etc/apt/sources.list /etc/apt/sources.list.bak
+# 清空配置文件
+sh -c 'echo > /etc/apt/sources.list'
+# 编辑配置文件
+nano /etc/apt/sources.list
+
+复制并粘贴以下内容：
+deb http://mirrors.tuna.tsinghua.edu.cn/debian/ buster main
+# deb-src http://mirrors.tuna.tsinghua.edu.cn/debian/ buster main
+deb http://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+# deb-src http://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+deb http://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
+# deb-src http://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
+```
+
+**openmediavault.list**
+
+```
+# 查看源
+cat /etc/apt/sources.list.d/openmediavault.list
+
+# 备份配置文件
+cp /etc/apt/sources.list.d/openmediavault.list /etc/apt/sources.list.d/openmediavault.list.bak
+# 清空配置文件
+sh -c 'echo > /etc/apt/sources.list.d/openmediavault.list'
+# 编辑配置文件
+nano /etc/apt/sources.list.d/openmediavault.list
+复制并粘贴以下内容：
+
+deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/public shaitan main
+deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/packages shaitan main
+## Uncomment the following line to add software from the proposed repository.
+# deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/public shaitan-proposed main
+# deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/packages shaitan-proposed main
+## This software is not part of OpenMediaVault, but is offered by third-party
+## developers as a service to OpenMediaVault users.
+# deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/public shaitan partner
+# deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/packages shaitan partner
+
+```
+
+**omvextras.list**
+
+```
+# 备份配置文件
+cp /etc/apt/sources.list.d/omvextras.list /etc/apt/sources.list.d/omvextras.list.bak
+# 清空配置文件
+sh -c 'echo > /etc/apt/sources.list.d/omvextras.list'
+# 编辑配置文件
+nano /etc/apt/sources.list.d/omvextras.list
+
+复制并粘贴以下内容：
+deb https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/openmediavault-plugin-developers usul main
+deb [arch=amd64] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian buster stable
+deb http://linux.teamviewer.com/deb stable main
+```
+
+
+
+### 安装 OMV-Extras
+
+```markdown
+# 先装这个 后面安装portainer会用到
+apt install apparmor apparmor-utils auditd 
+
+# 安装依赖
+apt --yes --no-install-recommends install dirmngr gnupg
+
+# 安装omv-extras-plugins，建议给omv网关配成openwrt的梯子，不然有点折磨
+wget -O - https://github.com/OpenMediaVault-Plugin-Developers/packages/raw/master/install | bash
+或者手动下载包安装
+https://mirrors.tuna.tsinghua.edu.cn/OpenMediaVault/openmediavault-plugin-developers/pool/main/o/openmediavault-omvextrasorg/
+
+dpkg -i openmediavault-omvextrasorg_6.1.1_all.deb
+```
+
+返回页面刷新，系统》插件 下方会出现omv-extras的按钮，选择docker和portainer安装
+
+portainer:  admin tlh@12345678
+
+
+
+安装portainer时报错（这个问题在我重装vmv后没事了，不知是不是我第二次安装先安装的那几个依赖发挥作用了，第一次装的时候遇到各钟版本依赖问题，吧omv都搞崩了）
+
+![image-20230305020744343](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230305020744402.png)
+
+https://forum.openmediavault.org/index.php?thread/40928-something-went-wrong-trying-to-pull-and-start-portainer-on-omv-6/
+
+根据以上链接，需要安装一些依赖
+
+```
+apt install apparmor apparmor-utils auditd
+```
+
+然后又报错
+
+![image-20230305021050012](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230305021050053.png)
+
+
+
+```
+查看依赖关系
+dpkg --info apache2_2.4.7-1ubuntu4.14_amd64.deb | grep Depends
+```
+
+安装aptitude工具。使用 aptitude 安装 debian依赖
+
+```
+apt install aptitude
+
+aptitude install apparmor apparmor-utils auditd
+
+apt show -a python3
+apt remove python3.9
+歇逼 把python3.9卸载了 系统崩了
+```
 
 
 
