@@ -19,7 +19,8 @@ BOOTPROTO=static # 将dhcp改为static
 IPADDR=192.168.1.98  # 配置的静态IP地址
 NETMASK=255.255.255.0  # 修改子网掩码
 GATEWAY=192.168.1.1  # 修改网关
-DNS1=8.8.8.8  # 修改DNS服务器
+DNS1=114.114.114.114  # 修改DNS服务器
+DNS2=8.8.8.8  # 修改DNS服务器
 
 ```
 

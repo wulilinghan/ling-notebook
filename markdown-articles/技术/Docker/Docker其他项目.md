@@ -1,3 +1,7 @@
+---
+
+---
+
 # qinglong
 
 > https://github.com/whyour/qinglong
@@ -5,21 +9,22 @@
 > 支持python3、javaScript、shell、typescript 的定时任务管理面板
 
 ```Markdown
-# 1.拉取镜像
-	docker pull whyour/qinglong:latest
-
-# 2.启动命令
-	docker run -dit -v $PWD/ql/config:/ql/config -v $PWD/ql/log:/ql/log -v $PWD/ql/db:/ql/db -p 5700:5700 --name qinglong --hostname qinglong --restart always whyour/qinglong:latest 
-
-# 3.初次访问
- 	http://192.168.3.50:5700
-	去自己映射目录config下找 auth.json，查看里面的 password
-	docker exec -it qinglong cat /ql/config/auth.json 
-
-# 4.访问地址
-	http://192.168.3.50:5700
-
+docker run -d --restart always --name qinglong \
+-p 5700:5700 \
+-v /data/docker_volume/ql/config:/ql/config \
+-v /data/docker_volume/ql/log:/ql/log \
+-v /data/docker_volume/ql/db:/ql/db \
+whyour/qinglong
 ```
+
+去自己映射目录config下找 auth.json，查看里面的 password
+ ```
+ docker exec -it qinglong cat /ql/config/auth.json 
+ ```
+
+访问地址
+ http://192.168.3.50:5700
+
 
 # UnblockNeteaseMusic
 
@@ -31,8 +36,12 @@
 docker pull pan93412/unblock-netease-music-enhanced
 
 # 2.启动命令
-docker run --name unblock-netease-music --restart always -p 18080:8080 -e ENABLE_FLAC=true -e ENABLE_LOCAL_VIP=true -e JSON_LOG=true -e LOG_LEVEL=debug -d pan93412/unblock-netease-music-enhanced  -o bilibili kugou kuwo 
-
+docker run -d  --name unblock-netease-music --restart always \
+-p 18080:8080 \
+-e ENABLE_FLAC=true \
+-e ENABLE_LOCAL_VIP=true \
+-e JSON_LOG=true  \
+-e LOG_LEVEL=debug pan93412/unblock-netease-music-enhanced  -o bilibili kugou kuwo \
 
 ```
 
@@ -276,47 +285,50 @@ dashboard_user=admin		#控制台登录名
 dashboard_pwd=xxxx		#控制台登录密码
 
 # 运行命令
-docker run  --network host -d --restart=always -v /opt/docker/frp/frps.ini:/etc/frp/frps.ini --name frps snowdreamtech/frps
+docker run  --network host -d --restart=always -v /docker_volume/frp/frps.ini:/etc/frp/frps.ini --name frps snowdreamtech/frps
 ```
 
 
 ## 2. 客户端(snowdreamtech/frpc)
 ```markdown
-# 首先在Docker目录下创建fpr客户端的映射目录
-mkdir -p /opt/docker/frp
+# 首先在Docker目录下创建fpr客户端的映射目录,创建映射文件frpc.ini
+mkdir -p /docker_volume/frp && cd /docker_volume/frp && touch frpc.ini
 
-# 在映射目录下面创建映射文件frpc.ini
-进入映射目录
-cd /opt/docker/frp
-编辑映射文件
+#编辑文件
 vi frpc.ini
 
 # 填入如下内容
 [common]
-#打开浏览器通过 http://127.0.0.1:7400 访问 Admin UI
+;打开浏览器通过 http://127.0.0.1:7400 访问 Admin UI
 admin_addr = 127.0.0.1
 admin_port = 7400
 admin_user = admin
 admin_pwd = admin
-# 服务器frps信息
-server_addr=xxx.xx.x.xx 	 	   #你的frps服务端的地址(公网IP或者域名)
-server_port=7000	   				#你的frps服务端端口号(可以自己单独指定)
-token=your_frps_password    		       #frps服务端token认证 (这个可以加也可以不加，需要根据服务端配置文件来对应)
+;服务器frps信息
+;你的frps服务端的地址(公网IP或者域名)
+server_addr=xxx.xx.x.xx
+;你的frps服务端端口号(可以自己单独指定) 	 	   
+server_port=7000
+;frps服务端token认证 (这个可以加也可以不加，需要根据服务端配置文件来对应)	   				
+token=your_frps_password    		      
 
 [blog]
 type=tcp
-local_ip=127.0.0.1 	#本地需要映射可以通过外网访问的应用IP
-local_port=8081  		#本地应用端口
-remote_port=6001 		#映射公网服务器端口
+;本地需要映射可以通过外网访问的应用IP
+local_ip=127.0.0.1
+;本地应用端口 	
+local_port=8081
+;映射公网服务器端口  		
+remote_port=6001 		
 
 [kibana]
 type=tcp
-local_ip=127.0.0.1	#本地需要映射可以通过外网访问的应用IP
-local_port=5601  		#本地应用端口
-remote_port=5601 		#映射公网服务器端口
+local_ip=127.0.0.1	
+local_port=5601  		
+remote_port=5601 	
 
 # 启动命令
-docker run --network bridge -d --restart=always -v /opt/docker/frp/frpc.ini:/etc/frp/frpc.ini --name=frpc snowdreamtech/frpc
+docker run -d --restart=always --name=frpc -v /docker_volume/frp/frpc.ini:/etc/frp/frpc.ini snowdreamtech/frpc
 ```
 
 
@@ -1182,7 +1194,24 @@ vling/markdown-blog:latest \
 docker run --rm -it -e CERT_DNS=lab.com,*.lab.com,*.data.lab.com -v /opt/docker/ssl:/ssl soulteary/certs-maker 
 ```
 
+# acme.sh
 
+Github：https://github.com/acmesh-official/acme.sh
+
+中文説明：https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E
+
+
+
+**acme.sh** 实现了 `acme` 协议, 可以从 letsencrypt 生成免费的证书.
+
+主要步骤:
+
+1. 安装 **acme.sh**
+2. 生成证书
+3. copy 证书到 nginx/apache 或者其他服务
+4. 更新证书
+5. 更新 **acme.sh**
+6. 出错怎么办, 如何调试
 
 # JetBrains License Server
 
@@ -1251,7 +1280,7 @@ http://{server_ip}:5080
 mkdir -p /opt/docker/pure-live/{data,log}
 
 #安装
-docker run -d --name pure-live -p 8800:8800 -v /opt/docker/pure-live/data:/data -v /opt/docker/pure-live/log:/log  --restart=always iyear/pure-live:latest
+docker run -d --name pure-live -p 8800:8800 -v /data/docker_volume/pure-live/data:/data -v /data/docker_volume/pure-live/log:/log  --restart=always iyear/pure-live:latest
 ```
 
 
@@ -1316,7 +1345,7 @@ password: n8hLPrBJ
 ```
 docker run -d --restart=always --name=pinry \
 	-p 8010:80 \
-    -v /docker_volume/pinry:/data \
+    -v /data/docker_volume/pinry:/data \
   getpinry/pinry:2.1.12
 ```
 
@@ -1342,8 +1371,8 @@ docker run -d --restart=always --name minio \
 -p 9001:9001 \
 -e "MINIO_ACCESS_KEY=admin" \
 -e "MINIO_SECRET_KEY=admin123456" \
--v /docker_volume/minio/data:/data \
--v /docker_volume/minio/config:/root/.minio \
+-v /data/docker_volume/minio/data:/data \
+-v /data/docker_volume/minio/config:/root/.minio \
 quay.io/minio/minio:RELEASE.2023-02-10T18-48-39Z \
 server /data --console-address ":9001"
 ```
@@ -1381,11 +1410,30 @@ http://192.168.3.50:9002/demo/photo_2022-09-04_04-28-27.jpg
 ```
 docker run -d --restart=always --name piwigo \
 -p 8009:80 \
--e TZ=Asia/Taipei \
--v /docker_volume/piwigo/config:/config \
--v /docker_volume/gallery:/gallery \
+-e TZ=Asia/Shanghai \
+-v /data/docker_volume/piwigo/config:/config \
+-v /data/docker_volume/gallery:/gallery \
 --link mysql \
 linuxserver/piwigo:13.5.0
 ```
 
 ![image-20230211213727054](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230211213727139.png)
+
+# koishi（聊天机器人）
+
+> https://koishi.chat/manual/introduction.html
+>
+> https://hub.docker.com/r/koishijs/koishi
+
+Koishi 是一个跨平台、可扩展、高性能的跨平台聊天机器人框架。
+
+```
+docker run -d --restart=always --name koishi \
+-p 5140:5140 \
+-e TZ=Asia/Shanghai \
+-v /data/docker_volume/koishi:/koishi \
+koishijs/koishi
+```
+
+
+

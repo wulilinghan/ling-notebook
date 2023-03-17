@@ -103,10 +103,26 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 ---
 ## 6.Docker的安装(centos7.x)
 
-### 6.1 卸载原有 docker
+### 6.1 脚本安装docker
+
+```markdown
+2023-03-05 补充一键安装Docker脚本
+docker一键换源，一键安装Docker
+https://gitee.com/SuperManito/LinuxMirrors
+
+# 软件源替换使用方法
+bash <(curl -sSL https://gitee.com/SuperManito/LinuxMirrors/raw/main/ChangeMirrors.sh)
+
+# Docker 一键安装脚本
+bash <(curl -sSL https://gitee.com/SuperManito/LinuxMirrors/raw/main/DockerInstallation.sh)
+```
+
+### 6.2 手动安装docker
 
 ```shell
-$ sudo yum remove docker \
+# 安装docker依赖
+ 卸载原有 docker
+ $ sudo yum remove docker \
                   docker-client \
                   docker-client-latest \
                   docker-common \
@@ -114,12 +130,7 @@ $ sudo yum remove docker \
                   docker-latest-logrotate \
                   docker-logrotate \
                   docker-engine
-```
-
-### 6.2 安装docker
-
-```shell
-# 安装docker依赖
+                  
 $ sudo yum install -y yum-utils \
   device-mapper-persistent-data \
   lvm2
@@ -374,7 +385,7 @@ Error response from daemon: Get https://index.docker.io/v1/search?q=mysql&n=25: 
 mkdir -p /opt/docker/portainer
 
 # 2.安装命令
-docker run --name portainer --restart=always -p 9000:9000 -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/docker/portainer:/data -d portainer/portainer-ce
+docker run --name portainer -d --restart=always -p 9000:9000 -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v /data/docker_volume/portainer:/data  portainer/portainer-ce
 
 # 3.访问地址
 http://192.168.3.50:9000/
@@ -423,15 +434,15 @@ find / -name docker.sock 查找一下正确位置就好了
 #MySQL5.7
 docker run -d --name mysql57 --restart=always \
 -p 3307:3306 \
--v /docker_volume/mysql57/data:/var/lib/mysql \
--v /docker_volume/mysql57/conf.d:/etc/mysql/conf.d \
+-v /data/docker_volume/mysql57/data:/var/lib/mysql \
+-v /data/docker_volume/mysql57/conf.d:/etc/mysql/conf.d \
 -e MYSQL_ROOT_PASSWORD=root mysql:5.7.40
 	
 # MySQL最新版本
 docker run -d --name mysql --restart=always \
 -p 3306:3306 \
--v /docker_volume/mysql/data:/var/lib/mysql \
--v /docker_volume/mysql/conf.d:/etc/mysql/conf.d \
+-v /data/docker_volume/mysql/data:/var/lib/mysql \
+-v /data/docker_volume/mysql/conf.d:/etc/mysql/conf.d \
 -e MYSQL_ROOT_PASSWORD=root  mysql
 ```
 > 命令说明：

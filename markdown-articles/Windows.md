@@ -1,5 +1,41 @@
 
 
+# IPV6
+
+参考文档：https://ipw.cn/doc/ipv6/user/enable_ipv6.html
+
+## 1. 查看网络前缀访问优先级
+
+```
+netsh interface ipv6 show prefixpolicies
+```
+
+我们先看下Windows10/11 中各个访问 IPv4/IPv6的优先级，可以看到 IPv6(`::/0`)比 IPv4(`::ffff:0:0/96`) 的优先级高，会被优先访问。
+
+> 第一列优先循序越大优先级越高，会优先访问。
+
+```
+E:\wuliling\Desktop>netsh interface ipv6 show prefixpolicies
+查询活动状态...
+
+优先顺序    标签   前缀
+----------  -----  --------------------------------
+        50      0  ::1/128
+        40      1  ::/0
+        35      4  ::ffff:0:0/96
+        30      2  2002::/16
+         5      5  2001::/32
+         3     13  fc00::/7
+         1     11  fec0::/10
+         1     12  3ffe::/16
+         1      3  ::/96
+
+
+E:\wuliling\Desktop>
+```
+
+
+
 # SSH公钥
 
 文件管理器输入框输入  %homepath%  就是用户目录了
