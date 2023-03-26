@@ -576,41 +576,51 @@ source=oracle_vol为Host的持久化卷，若未提前创建会自动创建，�
 ```
 ### 8.3 安装Redis
 
-```markdown
-# 1.在docker hub搜索redis镜像
-	docker search redis
+默认情况下redis官方镜像中没有redis.conf配置文件 需要去官网下载指定版本的配置文件
 
-# 2.拉取redis镜像到本地
-	docker pull redis
+1.进去opt文件夹并下载官方安装包
 
-# 3.启动redis服务运行容器
-	docker run --name redis -d redis:<tag> (没有暴露外部端口)
-	docker run --name redis -p 6379:6379 -d redis:<tag> (暴露外部宿主机端口为6379进行连接) 
-
-# 4.查看启动日志
-	docker logs -t -f <容器id|容器名称>
-	docker logs -t -f redis
-	
-# 5.进入容器内部查看
-	docker exec -it <容器id|名称> bash  
-	docker exec -it redis bash  
-	
-# 6.加载外部自定义配置启动redis容器
-	默认情况下redis官方镜像中没有redis.conf配置文件 需要去官网下载指定版本的配置文件
--- 1.进去opt文件夹并下载官方安装包
-cd /opt && wget http://download.redis.io/releases/redis-5.0.8.tar.gz					--- 2.解压
-tar -zxf redis-5.0.8.tar.gz                   
--- 3.创建挂载目录
-mkdir -p /opt/docker/redis
--- 4.将官方安装包中配置文件拷贝到要挂载的目录
-cp /opt/redis-5.0.8/redis.conf /opt/docker/redis   
--- 5.修改需要redis.conf 
-bind 0.0.0.0 		开启远程权限
-appendonly yes 	开启aof持久化
-
-# 7.将数据目录挂在到本地保证数据安全
-	docker run -d --name redis --restart=always -p 6379:6379 -v /opt/docker/redis/data:/data -v /opt/docker/redis/redis.conf:/usr/local/etc/redis/redis.conf  redis:5.0 
 ```
+cd /opt && wget http://download.redis.io/releases/redis-5.0.8.tar.gz		
+```
+
+2.解压
+
+```
+tar -zxf redis-5.0.8.tar.gz
+```
+
+3.创建挂载目录
+
+```
+mkdir -p /data/docker_volume/redis
+```
+
+4.将官方安装包中配置文件拷贝到要挂载的目录
+
+```
+cp /opt/redis-5.0.8/redis.conf /data/docker_volume/redis/redis.conf
+```
+
+5.修改需要redis.conf 
+
+```
+bind 0.0.0.0 		#开启远程权限
+appendonly yes 	    #开启aof持久化
+```
+
+
+
+```markdown
+# 启动
+docker run -d --name redis --restart=always \
+-p 6379:6379 \
+-v /data/docker_volume/redis/data:/data \
+-v /data/docker_volume/redis/redis.conf:/usr/local/etc/redis/redis.conf \
+redis:5.0
+```
+
+
 
 ### 8.4 安装Nginx
 

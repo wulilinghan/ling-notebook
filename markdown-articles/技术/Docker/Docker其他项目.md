@@ -1001,7 +1001,7 @@ arvon2014/webstack-laravel:v1.2.2 \
 
 > 官网：https://wordpress.com/zh-cn/
 
-1.安装前先手动创建个 `wordpress` 库，启动他这不会自动创建
+1.安装前先在mysql中手动创建个 `wordpress` 库，启动他这不会自动创建
 
 ```
 docker run -d --restart=always --name wordpress \
@@ -1011,8 +1011,8 @@ docker run -d --restart=always --name wordpress \
 -e WORDPRESS_DB_USER=root \
 -e WORDPRESS_DB_PASSWORD=root \
 -e WORDPRESS_DB_NAME=wordpress \
--v /docker_volume/wordpress/html:/var/www/html \
--v /docker_volume/wordpress/config/:/config \
+-v /data/docker_volume/wordpress/html:/var/www/html \
+-v /data/docker_volume/wordpress/config/:/config \
 wordpress
 ```
 

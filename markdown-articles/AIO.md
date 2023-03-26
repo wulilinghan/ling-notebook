@@ -938,6 +938,31 @@ qm importdisk 100 /var/lib/vz/template/iso/openwrt-03.04.2023-x86-64-generic-squ
 
 ### OpenMediaVault
 
+
+
+查看版本信息
+
+ hostnamectl
+
+ uname -a
+
+```
+root@openmediavault:/# hostnamectl
+   Static hostname: openmediavault
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 2ec90954e6074540b4df3c57cb28cac6
+           Boot ID: c34dbb40654b4ae89f85ad620dc1f3af
+    Virtualization: kvm
+  Operating System: Debian GNU/Linux 11 (bullseye)
+            Kernel: Linux 5.16.0-0.bpo.4-amd64
+      Architecture: x86-64
+```
+
+
+
+
+
 #### ovm配置
 
 ##### 安装 OMV-Extras（docker）
@@ -1021,6 +1046,9 @@ auth  required  pam_succeed_if.so user != root quiet_success
 
 > 官方安装文档：https://jellyfin.org/docs/general/installation/container
 >
+> [Jellyfin中国特供版+Docker镜像，含驱动，免折腾开箱即用](https://www.bilibili.com/read/cv14514123?msource=smzdm_937_0_184__f491cddbd1618c25)
+>
+> **Jellyfin中国特供版+Docker镜像**：[nyanmisaka/jellyfin - Docker Image | Docker Hub](https://hub.docker.com/r/nyanmisaka/jellyfin)
 
 ##### 安装Jellyfin
 
@@ -1029,9 +1057,16 @@ auth  required  pam_succeed_if.so user != root quiet_success
 ```
 version: '2.1'
 services:
+  doubanos:
+    image: caryyu/douban-openapi-server:latest
+    container_name: doubanos
+    network_mode: bridge
+    restart: unless-stopped
+    
   jellyfin:
     image: linuxserver/jellyfin
     container_name: jellyfin
+    privileged: true
     environment:
       - PUID=0
       - PGID=0
@@ -1039,6 +1074,8 @@ services:
     volumes:
       - /AppData/jellyfin/config:/config
       - /srv/dev-disk-by-uuid-1ab6cfe6-3277-4e8a-8dd2-d81e8362c4c0/homevedio:/homevedio
+    devices:
+      - /dev/dri:/dev/dri
     ports:
       - 8096:8096
     restart: unless-stopped
@@ -1064,13 +1101,106 @@ dev-disk-by-uuid-1ab6cfe6-3277-4e8a-8dd2-d81e8362c4c0 是磁盘，使用`df -h`�
 ls /dev/dri/
 ```
 
-能列出驱动文件列表说明支持
+在omv虚拟机汇总执行命令发现没有**renderD128**驱动文件，但是在宿主机pve上有
 
 ![image-20230308204239060](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230308204246154.png)
+
+这是宿主机pve 执行命令结果：
+
+![image-20230326134452597](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230326134459698.png)
+
+> `/dev/dri/card0` 和 `/dev/dri/renderD128` 都是 Linux 系统中与图形显示相关的设备文件。
+
+
+
+~~参考： **[【PVE7.1-8】LXC容器下Jellyfin服务器配置显卡硬件加速](https://www.bilibili.com/read/cv14489336)**~~
+
+
+
+先在宿主机PVE安装inter核显驱动
+
+```
+apt install intel-media-va-driver-non-free
+
+# 安装vainfo程序
+apt install vainfo
+```
+
+安装完成后，查询显卡信息，显示如下，说明驱动安装完成。
+
+```
+vainfo
+```
+
+![image-20230326141317904](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230326141317963.png)
+
+```
+# 查看所有pci设备
+lspci
+
+# 查看核显设备
+lspci -knn | grep -i -A 2 vga
+```
+红框圈起来的就是我的核显设备
+![image-20230326151922551](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230326151922630.png)
+在pve虚拟机 硬件》添加 ，添加pci设备
+
+![image-20230326152048768](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230326152048824.png)
+
 
 控制台》播放》硬件加速，选择 **Video Acceleration API(VAAPI)**，在启用硬件解码下方勾选所有媒体文件格式，然后保存
 
 ![image-20230308204725143](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230308204725224.png)
+
+
+
+#### kodi
+
+> [linuxserver/kodi-headless - Docker Image | Docker Hub](https://hub.docker.com/r/linuxserver/kodi-headless)
+
+媒体播放器
+```
+docker run -d --restart always --name=kodi-headless \
+-e PGID=0 -e PUID=0 \
+-e TZ=Asia/Shanghai \
+-p 8095:8080 \
+-p 9090:9090 \
+-p 9777:9777/udp \
+-v /data/docker_volume/kodi:/config/.kodi \
+linuxserver/kodi-headless
+```
+
+
+
+默认账号密码：kodi / kodi
+
+
+
+#### Emby
+
+> [zishuo/embyserver - Docker Image | Docker Hub](https://hub.docker.com/r/zishuo/embyserver/)
+>
+> [lovechen/embyserver - Docker Image | Docker Hub](https://hub.docker.com/r/lovechen/embyserver)
+
+Emby Media Server 学习版
+```
+docker run -d --restart always --name emby --privileged=true \
+-p '8097:8096' \
+-p '8920:8920' \
+-p '1900:1900/udp' \
+-p '7359:7359/udp' \
+-v /AppData/emby/config:/config \
+-v /srv/dev-disk-by-uuid-1ab6cfe6-3277-4e8a-8dd2-d81e8362c4c0/homevedio:/data \
+-e TZ="Asia/Shanghai" \
+--device /dev/dri:/dev/dri \
+-e UID=0 \
+-e GID=0 \
+-e GIDLIST=0 \
+--network=bridge \
+lovechen/embyserver
+```
+
+
 
 #### ddns-go
 
@@ -1420,3 +1550,76 @@ services:
 X1337站点，网址：https://x1337x.ws/
 
 如果不能自行编辑，希望将这些网址加入到相关公开站点中。我们这些墙内出墙很麻烦，用了很多的机场关的很快，稳定的机场又价格太高。
+
+
+
+# SMB服务
+
+https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html
+
+
+
+## 配置文件
+
+```
+cat /etc/samba/smb.conf
+```
+
+
+
+```
+systemctl status smbd 查看服务状态
+
+systemctl start smbd 开启服务
+
+systemctl restart smbd 重启服务
+
+systemctl stop smbd 停止
+```
+
+### client max protocol
+
+```
+Default: server max protocol = SMB3
+
+Example: server max protocol = LANMAN1
+```
+
+### client min protocol
+```
+Default: server min protocol = SMB2_02
+
+Example: server min protocol = NT1
+```
+
+
+
+## 查看服务端SMB协议版本
+
+OPENMEDIAVAULT 是我的nas服务主机名称，不带上 `-ServerName OPENMEDIAVAULT`也行
+
+```
+Get-SmbConnection -ServerName OPENMEDIAVAULT
+```
+
+Dialect版本就是SMB版本，我这里是3.1.1
+
+![image-20230319111402776](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230319111402823.png)
+
+
+
+# 测试硬盘读写速度
+
+利用win10自带的硬盘测试工具测读写速度。
+
+`win+s`打开搜索框，输入 cmd 找到命令提示符，右击以管理员身份运行。
+
+输入以下命令测试
+
+```
+winsat disk -drive <盘符>
+```
+
+
+
+![image-20230319105651660](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230319105651726.png)
