@@ -2,13 +2,10 @@
 title: AIO：all in one
 author: wulilh
 date: 2023-03-04 10:11:00
-tags:
-  - esxi
-  - pve
-categories: all in one
+tags: [esxi, pve]
+category: all in one
 link: 
 ---
-
 
 # 参考硬件配置
 

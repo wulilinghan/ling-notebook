@@ -1,5 +1,39 @@
 
 
+# 系统问题
+
+## 更换主板后遇见的问题
+
+### 1 无法进入已安装系统
+
+我的情况是能识别到磁盘，但是无法进入到系统，处理办法
+
+进入BIOS ，启动》CMS   开启CMS，然后选择启动盘重启即可
+
+###  2 有线连接无网络
+
+处理办法：重新安装网络驱动
+
+下个360驱动大师网卡版安装即可
+
+http://dl.360safe.com/drvmgr/gwwk__360DrvMgrInstaller_net.exe
+
+
+
+## 游戏问题
+
+### 1 win11打游戏弹出快速助手弹窗自动切换至桌面问题
+
+win11打LOL经常不小心碰到 CTRL+WIN+Q快捷键，游戏就会切到桌面弹出快速助手，特别是打团狂按键盘的时候最容易触发了，快恶心的雅痞。
+
+![image-20230430175936839](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230430175943910.png)
+
+解决办法：下一个 [PowerToys](https://docs.microsoft.com/zh-cn/windows/powertoys/install) ，设置一下快捷键映射
+
+![image-20230430180246506](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230430180246544.png)
+
+
+
 # IPV6
 
 参考文档：https://ipw.cn/doc/ipv6/user/enable_ipv6.html
@@ -125,6 +159,45 @@ maven config：
 ```
 
 
+
+
+
+# Redis
+
+启动脚本
+
+```bat
+@echo off
+REM 替换为 Redis 的安装路径
+set REDIS_PATH="D:\SoftEnv\redis\redis-server.exe"
+set REDIS_CONF="D:\SoftEnv\redis\redis.windows.conf"
+
+REM 检查 Redis 服务器是否已经运行
+tasklist /fi "imagename eq redis-server.exe" | find "redis-server.exe" > nul
+if %errorlevel% equ 0 (
+    echo Redis server is already running.
+    cmd /k echo
+)
+
+REM 替换为 Redis 的安装路径
+cd /d D:\SoftEnv\redis
+
+REM 启动 Redis 服务器
+REM start %REDIS_PATH% %REDIS_CONF%
+redis-server.exe redis.windows.conf
+
+echo Starting Redis server....
+timeout /t 5 > nul
+
+REM 检查 Redis 服务器是否成功启动
+tasklist /fi "imagename eq redis-server.exe" | find "redis-server.exe" > nul
+if %errorlevel% equ 0 (
+    echo Redis server has been successfully started.
+) else (
+    echo Redis server failed to start.
+)
+
+```
 
 
 

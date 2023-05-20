@@ -94,6 +94,8 @@ paintings, sketches, (worst quality:2), (low quality:2), (normal quality:2), low
 
 - seed ：1315543661
 
+![image-20230514223821412](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230514223821769.png)
+
 #### Japanese Doll Likeness
 
 > 下载地址：https://civitai.com/models/10135/japanese-doll-likeness
@@ -209,7 +211,7 @@ multiple_breasts,{mutated_hands_and_fingers},{long_body},{mutation,poorly_drawn}
 - Model hash: 2c13a9f1
 - Clip skip: 2
 
-
+![image-20230514223741907](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230514223749045.png)
 
 例二，女性：
 
@@ -234,7 +236,7 @@ multiple_breasts,{mutated_hands_and_fingers},{long_body},{mutation,poorly_drawn}
 - Model hash: 2c13a9f1
 - Clip skip: 2
 
-
+![image-20230514223800579](https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/20230514223800672.png)
 
 ## Redshift Diffusion V1
 
