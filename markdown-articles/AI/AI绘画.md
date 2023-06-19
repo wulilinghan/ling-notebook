@@ -165,6 +165,78 @@ paintings, sketches, (worst quality:2), (low quality:2), (normal quality:2), low
 
 
 
+## chilloutmix + lora
+
+<img src="https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3a8e5138-b0fa-4648-bc47-67a524586e58/width=960/00931-3265293977-(8k,%20RAW%20photo,%20best%20quality,%20masterpiece_1.2),%20(realistic,%20photo-realistic_1.37),%20ultra%20highres,%20depth%20of%20field,%20chromatic%20aber.jpeg" style="height:200px" align="left"/>
+
+所需主模型：**[chilloutmix_NiPrunedFp32Fix](https://civitai.com/models/6424/chilloutmix?modelVersionId=11745)**
+
+Lora模型: 【**[cuteGirlMix4_v10](https://huggingface.co/luxluna/cuteGirlMix4_v10/tree/main)**】、【**[seeThroughSilhouette_v10](https://huggingface.co/samle/sd-webui-models/blob/main/seeThroughSilhouette_v10.safetensors)**】
+
+
+
+```
+extremely detailed CG unity 8k wallpaper,(masterpiece),(best quality),(ultra detailed),(ultra realistic),(Best character details:1.36),nikon d750 f/1.4 55mm,dynamic angle,professional lighting, photon mapping, radiosity, physically-based rendering,
+outdoors,looking at viewer,blush,(taut shirt), jeans,
+1girl,(mature female:0.2),tall body,golden proportions,(Kpop idol),(shiny skin:1.2),(oil skin:1.1),makeup,[:(high detailed face:1.2):0.2]:, <lora:cuteGirlMix4_v10:0.8>, (close up), park, depth of field, <lora:seeThroughSilhouette_v10:0.5>,( closed mouth: 0.5)
+((wavy gray hair and a sophisticated sense of style)),(aegyo sal:1),(puffy eyes),(eyelashes:1.1),(parted lips:1.1),red lipstick,wide shoulders,
+Negative prompt: Multiple people,More than one person,2girl,DeepNegative,
+sketches,lowres,polar lowres,(worst quality:2),(low quality:2),(normal quality:2),((monochrome)),((grayscale)),blurry,cropped,mutation,deformed,text,error,signature,watermark,username,extra digit,fewer digits,jpeg artifacts,
+skin spots, acnes, skin blemishes,
+bad anatomy,bad anatomy,bad proportions,gross proportions,long neck,cross-eyed,malformed limbs,blurred hands,fused fingers,poorly drawn face,poorly drawn hands,
+(mutated hands and fingers:1.3),(mutated legs and foots:1.3),bad body,bad limbs,bad arms,bad hands,bad fingers,bad leg,bad feet,missing limbs,missing arms,missing hands,missing fingers,missing legs,missing footextra limbs,extra arms,extra fingers,extra leg,extra foot,
+Steps: 28, Sampler: DPM++ SDE Karras, CFG scale: 7.5, Seed: 1340860639, Face restoration: CodeFormer, Size: 640x960, Model hash: fc2511737a, Model: chilloutmix_NiPrunedFp32Fix, Denoising strength: 0.4, Hires upscale: 1.5, Hires steps: 30, Hires upscaler: Latent (bicubic antialiased)
+
+```
+
+
+
+<img src="https://raw.githubusercontent.com/wulilh/PicBed/main/img2023/202306192212698.png" style="height:600px"/>
+
+
+
+》 更多主模型替换：
+【**[majicMIX sombre](https://civitai.com/models/62778/majicmix-sombre)**】
+
+<img src="https://www.freedidi.com/wp-content/uploads/2023/05/00001-1362832146.jpeg" style="height:200px" align="left"/>
+
+
+【**[XXMix_9realistic](https://civitai.com/models/47274/xxmix9realistic)**】
+
+<img src="https://www.freedidi.com/wp-content/uploads/2023/05/13813-2748008393-front-focusin-the-dark_1.6_Hyperrealist-portrait-of-female-by-david-hockney-and-alphonse-muchafantasy-ar.jpeg" style="height:200px" align="left"/>
+
+【**[majicMIX realistic](https://civitai.com/models/43331/majicmix-realistic)**】
+
+<img src="https://www.freedidi.com/wp-content/uploads/2023/05/00006-3135271734-1.jpeg" style="height:200px" align="left"/>
+
+【[B2](https://civitai.com/images/754726?period=AllTime&periodMode=published&sort=Newest&view=categories&modelVersionId=55911&modelId=43331&postId=204993)】
+
+<img src="https://www.freedidi.com/wp-content/uploads/2023/05/00015-3984321575.jpeg" style="height:200px" align="left"/>
+
+
+
+【[B3](https://civitai.com/images/753660?period=AllTime&periodMode=published&sort=Newest&view=categories&modelVersionId=55911&modelId=43331&postId=204763)】
+
+<img src="https://www.freedidi.com/wp-content/uploads/2023/05/01589-1370404257-masterpiece-best-quality-ultra-high-res-close-up-slim-body-1girlschool-uniform-long-hair-laughing-ramen-night-Tokyo.jpeg" style="height:200px" align="left"/>
+
+【[B4](https://civitai.com/images/714213?period=AllTime&periodMode=published&sort=Newest&view=categories&modelVersionId=55911&modelId=43331&postId=195070)】
+
+<img src="https://www.freedidi.com/wp-content/uploads/2023/05/504-4k-1.jpg" style="height:200px" align="left"/>
+
+
+
+## 胶片风格AI写真照片
+
+FilmGirl 胶片风 Film Grain LoRA & LoHA
+
+[FilmGirl 胶片风 Film Grain LoRA & LoHA - VELVIA 2.0 LoRA | Stable Diffusion LoRA | Civitai](https://civitai.com/models/33208/filmgirl-film-grain-lora-and-loha)
+
+
+
+这是用于生成胶片风格AI写真照片的LoHA & LoRA模型。与[majicMIX realistic](https://civitai.com/models/43331/majicmix-realistic?modelVersionId=55911)**、**[MoonMIX](https://civitai.com/models/43977/moonmix)或[Chilloumix](https://civitai.com/models/6424/chilloutmix)搭配使用，可以生成逼真的胶片风格照片。同时推荐搭配TEXTUAL INVERSION**模型：**[bad_pictures](https://civitai.com/models/23178/badpictures)**、**[negative_hand Negative Embedding](https://civitai.com/models/56519/negativehand-negative-embedding)**。这两个**Negative Embedding模型不会显著影响到胶片的质感。
+
+
+
 ## Momoko
 
 > 下载地址：https://huggingface.co/ouo/momoko
@@ -305,6 +377,8 @@ multiple_breasts,{mutated_hands_and_fingers},{long_body},{mutation,poorly_drawn}
 标签：剪纸、动画
 
 使用剪纸图片训练而来，很有趣的一个模型。
+
+
 
 
 
