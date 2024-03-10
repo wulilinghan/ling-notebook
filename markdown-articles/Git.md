@@ -8,6 +8,15 @@ git config --list --show-origin
 git config --global user.name "xxxx"
 # 假如是github，这里的邮件地址跟github的邮箱地址一致，才会有小绿格
 git config --global user.email xxxx@example.com
+
+# git 设置和取消代理
+git config --global https.proxy http://127.0.0.1:18090
+
+git config --global https.proxy https://127.0.0.1:18090
+
+git config --global --unset http.proxy
+
+git config --global --unset https.proxy
 ```
 
 ## .gitattributes
