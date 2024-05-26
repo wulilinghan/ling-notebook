@@ -1130,6 +1130,31 @@ http://10.15.0.8:8989/ems/login.html
 
 ##### 7.接口docker容器之间网络互通问题
 
+###  9.5 上传dockerhub
+
+idea设置,配置docker服务器
+
+![在这里插入图片描述](https://raw.githubusercontent.com/wulilinghan/PicBed/main/img2024/53724b5887924cf8aef5ab829e3fafa4.png)
+
+可以在idea里build镜像,然后上传到自己的docker服务器
+
+然后在自己的docker服务器上登录dockerhub
+```
+# 登录dockerhub
+docker login -u 你的用户名
+
+# 输入密码，登陆成功后，在推送前，必须将你的镜像命名规范格式，否则会失败。输入如下命令：
+
+docker tag 镜像id 你的docker账户名/新的镜像名:版本号
+
+例：docker tag c3e2d1340918 vling/demo:1.0
+
+# 规范格式后可以推送镜像
+docker push 用户名/镜像名:标签(版本号)
+
+例：docker push vling/demo:1.0
+```
+打开[docker hub](https://hub.docker.com/)，登陆之后查看自己仓库的镜像
 # Docker Compose
 
 ## 简介
