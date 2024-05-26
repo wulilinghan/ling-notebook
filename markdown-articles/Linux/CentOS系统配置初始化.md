@@ -33,12 +33,12 @@ service network restart
 
 # Yum源
 
-## 配置网络yum源
-
-### 备份
+## 配置网络yum源(epel-release)
 
 ```markdown
 cd /etc/yum.repos.d
+
+#  输入 ll 命令查看文件列表
 
 [root@localhost yum.repos.d]# ll
 总用量 52
@@ -55,17 +55,18 @@ cd /etc/yum.repos.d
 -rw-r--r--. 1 root root 1457 9月   5 2021 epel-testing.repo
 
 # 备份
-mkdir repo_bak && mv *.repo repo_bak/ 
-```
+cd /etc/yum.repos.d
+mkdir repo_bak && cp *.repo repo_bak/ 
 
-
-### 安装epel-release软件包
-
-```shell
+# 安装epel-release软件包
 yum -y install epel-release
 ```
+## LinuxMirrors GNU/Linux 更换系统软件源脚本
+https://linuxmirrors.cn/
+
 
 # 安装vncserver
+
 ```bash
 yum -y install tigervnc-server
 

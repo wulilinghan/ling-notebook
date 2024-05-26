@@ -106,23 +106,25 @@ application项目    Docker  应用容器平台  Mysql  Redis  mongoDB   Elastic
 ### 6.1 脚本安装docker
 
 ```markdown
-2023-03-05 补充一键安装Docker脚本
-docker一键换源，一键安装Docker
-https://gitee.com/SuperManito/LinuxMirrors
+GNU/Linux 更换系统软件源脚本 文档地址如下：
+https://linuxmirrors.cn/mirrors/
 
-# 软件源替换使用方法
-bash <(curl -sSL https://gitee.com/SuperManito/LinuxMirrors/raw/main/ChangeMirrors.sh)
+# 使用方法
+# 软件源替换使用方法 执行以下命令
+bash <(curl -sSL https://linuxmirrors.cn/main.sh)
 
-# Docker 一键安装脚本
-bash <(curl -sSL https://gitee.com/SuperManito/LinuxMirrors/raw/main/DockerInstallation.sh)
+# Docker 一键安装脚本 执行以下命令
+bash <(curl -sSL https://linuxmirrors.cn/docker.sh)
+
+# 安装完后查看docker状态
+systemctl status docker
 ```
 
 ### 6.2 手动安装docker
 
-```shell
-# 安装docker依赖
- 卸载原有 docker
- $ sudo yum remove docker \
+```markdown
+# 卸载原有 docker
+sudo yum remove docker \
                   docker-client \
                   docker-client-latest \
                   docker-common \
@@ -130,55 +132,48 @@ bash <(curl -sSL https://gitee.com/SuperManito/LinuxMirrors/raw/main/DockerInsta
                   docker-latest-logrotate \
                   docker-logrotate \
                   docker-engine
-                  
-$ sudo yum install -y yum-utils \
+# 安装docker依赖                  
+sudo yum install -y yum-utils \
   device-mapper-persistent-data \
   lvm2
 
 # 设置docker的yum源
-$ sudo yum-config-manager \
+sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
 
 # 可以选择国内的一些源地址
 # 阿里云
-$ sudo yum-config-manager \
+sudo yum-config-manager \
     --add-repo \
     http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
 # 清华大学源
-$ sudo yum-config-manager \
+sudo yum-config-manager \
     --add-repo \
     https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo
 ```
 
 
-```shell
+```markdown
 # 安装最新版的docker
-$ sudo yum install docker-ce docker-ce-cli containerd.io
+sudo yum install docker-ce docker-ce-cli containerd.io
 
 # 或指定版本安装docker
-$ yum list docker-ce --showduplicates | sort -r
+yum list docker-ce --showduplicates | sort -r
 # 安装指定版本docker命令格式
-$ sudo yum install docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
+sudo yum install docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
 # 安装指定版本docker
-$ sudo yum install docker-ce-18.09.5-3.el7 docker-ce-cli-18.09.5-3.el7 containerd.io
-```
+sudo yum install docker-ce-18.09.5-3.el7 docker-ce-cli-18.09.5-3.el7 containerd.io
 
-> 启动docker
-
-```shell
-$ sudo systemctl start docker
-```
-> 设置docker自启
-
-```shell
-$ sudo systemctl enable docker
-```
-> 关闭docker
-
-```shell
-$ sudo systemctl stop docker
+# 启动docker
+sudo systemctl start docker
+# 设置docker自启
+sudo systemctl enable docker
+# 关闭docker
+sudo systemctl stop docker
+# 重启docker
+sudo systemctl restart docker
 ```
 
 ------
@@ -399,11 +394,11 @@ http://192.168.3.50:9000/
 # 1. 编辑docker.service
 vim /usr/lib/systemd/system/docker.service
 
-#找到 ExecStart 属性
+# 找到 ExecStart 属性
 [Service]
 ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 
-#新增 -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+# 在内容后面新增 -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
 # 建议换2375端口，提高安全性
 [Service]
 ExecStart=/usr/bin/dockerd -H  fd:// --containerd=/run/containerd/containerd.sock -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
@@ -422,6 +417,8 @@ firewall-cmd --list-ports
 # 这个内容有待验证
 6.如果重启不起来 估计是这个 unix://var/run/docker.sock 文件位置不对 
 find / -name docker.sock 查找一下正确位置就好了
+
+#  本地Portainer连接这个地址就好了 http://192.168.32.232:2375
 
 ```
 
